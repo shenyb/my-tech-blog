@@ -1,0 +1,142 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE, SITE_AUTHOR, GITHUB_URL } from '../consts';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="hero">
+				<h1>👋 你好，我是{SITE_AUTHOR}</h1>
+				<p class="subtitle">{SITE_DESCRIPTION}</p>
+			</section>
+
+			<section class="links-section">
+				<h2>🔗 快速链接</h2>
+				<div class="link-cards">
+					<a href={GITHUB_URL} target="_blank" class="link-card">
+						<span class="link-icon">🐙</span>
+						<span class="link-title">GitHub</span>
+						<span class="link-desc">我的开源项目和代码</span>
+					</a>
+					<a href="/blog" class="link-card">
+						<span class="link-icon">📝</span>
+						<span class="link-title">技术博客</span>
+						<span class="link-desc">技术文章和学习笔记</span>
+					</a>
+					<a href="/about" class="link-card">
+						<span class="link-icon">👤</span>
+						<span class="link-title">关于我</span>
+						<span class="link-desc">了解更多关于我的信息</span>
+					</a>
+				</div>
+			</section>
+
+			<section class="tech-section">
+				<h2>🛠️ 技术栈</h2>
+				<div class="tech-tags">
+					<span class="tech-tag">Java</span>
+					<span class="tech-tag">Spring Boot</span>
+					<span class="tech-tag">MyBatis-Plus</span>
+					<span class="tech-tag">Redis</span>
+					<span class="tech-tag">MySQL</span>
+					<span class="tech-tag">TypeScript</span>
+					<span class="tech-tag">Vue</span>
+					<span class="tech-tag">Docker</span>
+					<span class="tech-tag">Cloudflare</span>
+				</div>
+			</section>
+
+			<section class="recent-section">
+				<h2>📄 最新文章</h2>
+				<p>前往 <a href="/blog">博客页面</a> 查看所有文章</p>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.hero {
+		text-align: center;
+		padding: 2em 0;
+	}
+	.hero h1 {
+		font-size: 2.5em;
+		margin-bottom: 0.3em;
+	}
+	.subtitle {
+		font-size: 1.3em;
+		color: rgb(var(--gray));
+	}
+
+	.links-section, .tech-section, .recent-section {
+		margin: 2em 0;
+	}
+	.links-section h2, .tech-section h2, .recent-section h2 {
+		margin-bottom: 1em;
+	}
+
+	.link-cards {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 1em;
+	}
+	.link-card {
+		display: flex;
+		flex-direction: column;
+		padding: 1.5em;
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 12px;
+		text-decoration: none;
+		color: rgb(var(--gray-dark));
+		transition: transform 0.2s, box-shadow 0.2s;
+	}
+	.link-card:hover {
+		transform: translateY(-2px);
+		box-shadow: var(--box-shadow);
+	}
+	.link-icon {
+		font-size: 2em;
+		margin-bottom: 0.3em;
+	}
+	.link-title {
+		font-weight: 700;
+		font-size: 1.1em;
+		color: rgb(var(--black));
+	}
+	.link-desc {
+		font-size: 0.85em;
+		color: rgb(var(--gray));
+		margin-top: 0.3em;
+	}
+
+	.tech-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5em;
+	}
+	.tech-tag {
+		padding: 0.4em 1em;
+		background: rgb(var(--gray-light));
+		border-radius: 20px;
+		font-size: 0.9em;
+		color: rgb(var(--gray-dark));
+	}
+
+	@media (max-width: 720px) {
+		.hero h1 {
+			font-size: 1.8em;
+		}
+		.link-cards {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
