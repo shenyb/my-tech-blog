@@ -5,23 +5,26 @@
  */
 
 :root {
-	--accent: #2337ff;
-	--accent-dark: #000d8a;
-	--black: 15, 18, 25;
-	--gray: 96, 115, 159;
-	--gray-light: 229, 233, 240;
-	--gray-dark: 34, 41, 57;
-	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
+	--accent: #5b8cff;
+	--accent-dark: #3b6dd9;
+	--black: 230, 233, 240;
+	--gray: 150, 165, 195;
+	--gray-light: 35, 40, 55;
+	--gray-dark: 200, 210, 225;
+	--gray-gradient: rgba(20, 23, 32, 95%), rgba(14, 16, 24, 98%);
 	--box-shadow:
-		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
-		0 16px 32px rgba(var(--gray), 33%);
+		0 2px 6px rgba(0, 0, 0, 40%), 0 8px 24px rgba(0, 0, 0, 45%),
+		0 16px 32px rgba(0, 0, 0, 50%);
+	--bg: #121420;
+	--card-bg: #1c1f2e;
+	--border: #2a2e42;
 }
 body {
 	font-family: var(--font-atkinson);
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat;
+	background: var(--bg);
 	background-size: 100% 600px;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
@@ -33,7 +36,49 @@ main {
 	width: 720px;
 	max-width: calc(100% - 2em);
 	margin: auto;
-	padding: 3em 1em;
+	padding: 2em 1em;
+	min-height: calc(100vh - 110px);
+}
+
+/* 统一页面容器：所有页面共用结构，保证跳转无闪屏 */
+.page {
+	max-width: 1020px;
+	margin: 0 auto;
+}
+.page.layout {
+	display: flex;
+	gap: 2em;
+	min-height: calc(100vh - 110px);
+	padding: 2em 1em;
+}
+.page.layout main {
+	flex: 1;
+	min-width: 0;
+	width: auto;
+	max-width: none;
+	padding: 0;
+	margin: 0;
+	min-height: auto;
+}
+.page.layout .sidebar {
+	width: 220px;
+	flex-shrink: 0;
+	position: sticky;
+	top: 1em;
+	align-self: flex-start;
+	max-height: calc(100vh - 130px);
+	overflow-y: auto;
+}
+@media (max-width: 860px) {
+	.page.layout {
+		flex-direction: column;
+		padding: 1em;
+	}
+	.page.layout .sidebar {
+		width: 100%;
+		position: static;
+		max-height: none;
+	}
 }
 h1,
 h2,
@@ -68,7 +113,7 @@ a {
 	color: var(--accent);
 }
 a:hover {
-	color: var(--accent);
+	color: var(--accent-dark);
 }
 p {
 	margin-bottom: 1em;
@@ -93,12 +138,16 @@ img {
 }
 code {
 	padding: 2px 5px;
-	background-color: rgb(var(--gray-light));
+	background-color: var(--card-bg);
+	border: 1px solid var(--border);
 	border-radius: 2px;
+	color: rgb(var(--black));
 }
 pre {
 	padding: 1.5em;
 	border-radius: 8px;
+	background: var(--card-bg);
+	border: 1px solid var(--border);
 }
 pre > code {
 	all: unset;
@@ -108,10 +157,11 @@ blockquote {
 	padding: 0 0 0 20px;
 	margin: 0;
 	font-size: 1.333em;
+	color: rgb(var(--gray));
 }
 hr {
 	border: none;
-	border-top: 1px solid rgb(var(--gray-light));
+	border-top: 1px solid var(--border);
 }
 @media (max-width: 720px) {
 	body {

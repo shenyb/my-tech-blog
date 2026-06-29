@@ -1,33 +1,182 @@
 ---
-import Layout from '../layouts/BlogPost.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+const title = '开篇词';
+const description = '为什么要建这个站、写给谁看、能收获什么——干货·工程化复盘的开篇词';
 ---
 
-<Layout
-	title="关于我"
-	description="全栈开发者，热爱技术分享和开源"
-	pubDate={new Date('2024-01-01')}
->
-	<h2>👋 你好</h2>
-	<p>
-		我是申延彬，一名全栈开发者。主要从事 Java 后端开发，熟悉 Spring Boot、MyBatis-Plus、Redis 等技术栈，
-		同时也对前端和云原生技术有浓厚兴趣。
-	</p>
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`${title} · ${SITE_TITLE}`} description={description} />
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "Article",
+				"headline": "开篇词：干货是怎么来的",
+				"description": description,
+				"datePublished": "2026-06-29",
+				"author": { "@type": "Person", "name": "申延彬" },
+				"publisher": { "@type": "Person", "name": "申延彬" }
+			}
+		</script>
+	</head>
+	<body>
+		<Header />
+		<div class="page">
+		 <main>
+		  <article class="prose">
+				<div class="meta">
+					<time datetime="2026-06-29">2026-06-29</time>
+				</div>
+				<h1>开篇词：干货是怎么来的</h1>
 
-	<h2>💼 技术领域</h2>
-	<ul>
-		<li><strong>后端：</strong>Java / Spring Boot / MyBatis-Plus / SCF 微服务</li>
-		<li><strong>数据库：</strong>MySQL / Redis</li>
-		<li><strong>前端：</strong>TypeScript / Vue</li>
-		<li><strong>运维：</strong>Docker / Cloudflare / CI/CD</li>
-	</ul>
+				<p class="lead">
+					所有人都在教"Hello World 怎么写"，<strong>没人教"生产环境怎么不出事"</strong>。
+					这句话我想了很久，最后决定就把它当这个站的开场白。
+				</p>
 
-	<h2>🔗 链接</h2>
-	<ul>
-		<li><a href="https://github.com/shenyb" target="_blank">GitHub</a> — 我的开源项目和代码</li>
-	</ul>
+				<h2>这个站要干什么</h2>
+				<p>
+					一句话：<strong>复盘真实事故，提炼可迁移的教训</strong>。
+				</p>
+				<p>
+					我会持续整理各大厂公开的事故复盘——美团的、字节的、阿里的、Stack Overflow 的、AWS 的、GitHub 的，
+					也包括我自己工作中踩过的坑。每篇都按统一模板拆开：
+				</p>
+				<ul>
+					<li>一句话事故摘要</li>
+					<li>影响范围（时长 / 用户量 / 损失）</li>
+					<li>时间线（3-5 个关键节点）</li>
+					<li>根因（技术层面）</li>
+					<li>教训（可迁移的，3 条以内）</li>
+					<li>我们能借鉴啥</li>
+				</ul>
+				<p>
+					不是照抄原文，是做结构化提炼 + 自己的解读。事故原文放那里没人看，提炼成模板才能塞进脑子里。
+				</p>
 
-	<h2>📬 联系方式</h2>
-	<p>
-		欢迎通过 <a href="mailto:shenyb@example.com">邮件</a> 联系我。
-	</p>
-</Layout>
+				<h2>写给谁看</h2>
+				<p>
+					如果你写过"这段代码在本地跑得好好的，上了生产就炸了"——这里就是给你的。
+				</p>
+				<p>
+					不管你是后端开发、运维、还是架构师，只要你的代码最终会跑在生产环境上，这里就值得你看。
+					新手可以提前看到别人踩过的坑少踩一遍，老手可以从别人的事故里偷到自己没遇到过的经验。
+				</p>
+
+				<h2>为什么是复盘而不是别的</h2>
+				<p>
+					我看过太多技术内容站死在两个坑里：
+				</p>
+				<ul>
+					<li><strong>追热点</strong>——今天写 AI Agent，明天写 RAG，后天就不想写了</li>
+					<li><strong>写 Hello World</strong>——人人都能写，写得再好也只是搬运官方文档</li>
+				</ul>
+				<p>
+					事故复盘恰好避开这两个坑。事故源源不断（每个故障都是一篇素材），而且没人愿意花时间整理——
+					<strong>"能干 + 能写"本来就是稀缺组合</strong>。这条赛道反而最空。
+				</p>
+				<p>
+					另一个原因是经验型内容不会过时。今天复盘的事故根因，5 年后大概率还在犯同样的错。
+					八股文会过期，事故不会。
+				</p>
+
+				<h2>不是什么</h2>
+				<ul>
+					<li>不是刷题面试站</li>
+					<li>不是追热点新闻站</li>
+					<li>不是卖课卖货站</li>
+					<li>不是焦虑营销站</li>
+				</ul>
+				<p>就是一个纯粹的内容站。有素材了就写，没有就不写。每一篇都值得你读完。</p>
+
+				<h2>关于节奏</h2>
+				<p>
+					我不会承诺"每周一篇雷打不动"——业余做产品最大的死法就是硬扛节奏把自己写干。
+					有素材、有想法的时候就写；没有的时候就不发。
+				</p>
+				<p>
+					但我会承诺一件事：<strong>每一篇发出来的，都是干货</strong>。不发水文凑数，不发流量文骗点击。
+					宁可空着也不糊弄。
+				</p>
+
+				<h2>一点小的野心</h2>
+				<p>
+					希望有一天，当你遇到一个奇怪的生产故障时，能想起"干货站上看过类似的"。那就够了。
+				</p>
+				<p>
+					等到攒够 50 篇再回头看，希望能有个意外之喜。50 篇之前不看流量、不追数据，纯写。
+				</p>
+
+				<p class="closing">
+					—— 申延彬，2026 年 6 月
+				</p>
+			</article>
+		</main>
+	</div>
+	<Footer />
+	</body>
+</html>
+
+<style>
+	.prose {
+	 max-width: 680px;
+	 margin: auto;
+	 padding: 2em 1em 4em;
+	 font-size: 0.9em;
+	}
+	.meta {
+		color: rgb(var(--gray));
+		font-size: 0.9em;
+		margin-bottom: 0.5em;
+	}
+	.prose h1 {
+		font-size: 2em;
+		margin-bottom: 1.2em;
+		line-height: 1.3;
+		color: rgb(var(--black));
+	}
+	.prose h2 {
+		font-size: 1.3em;
+		margin: 2em 0 0.6em 0;
+		color: rgb(var(--black));
+		border-left: 3px solid var(--accent);
+		padding-left: 0.6em;
+	}
+	.prose .lead {
+		font-size: 1.1em;
+		line-height: 1.8;
+		color: rgb(var(--gray-dark));
+		padding: 1em 0;
+		border-top: 1px solid var(--border);
+		border-bottom: 1px solid var(--border);
+		margin-bottom: 1.5em;
+	}
+	.prose p {
+		font-size: 1em;
+		line-height: 1.8;
+		margin-bottom: 1em;
+		color: rgb(var(--gray-dark));
+	}
+	.prose ul {
+		padding-left: 1.2em;
+		margin-bottom: 1em;
+	}
+	.prose li {
+		margin-bottom: 0.4em;
+		line-height: 1.6;
+		color: rgb(var(--gray-dark));
+	}
+	.prose strong {
+		color: rgb(var(--black));
+	}
+	.prose .closing {
+		text-align: right;
+		color: rgb(var(--gray));
+		font-style: italic;
+		margin-top: 2em;
+	}
+</style>
