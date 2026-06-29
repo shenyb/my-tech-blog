@@ -6,7 +6,7 @@ import { defineConfig, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://shenyb.pages.dev',
+	site: 'https://my-tech-blog-cxz.pages.dev',
 	integrations: [mdx(), sitemap()],
 	fonts: [
 		{

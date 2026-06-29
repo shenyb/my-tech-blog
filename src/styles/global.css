@@ -5,20 +5,20 @@
  */
 
 :root {
-	--accent: #5b8cff;
-	--accent-dark: #3b6dd9;
-	--black: 230, 233, 240;
-	--gray: 150, 165, 195;
-	--gray-light: 35, 40, 55;
-	--gray-dark: 200, 210, 225;
-	--gray-gradient: rgba(20, 23, 32, 95%), rgba(14, 16, 24, 98%);
-	--box-shadow:
-		0 2px 6px rgba(0, 0, 0, 40%), 0 8px 24px rgba(0, 0, 0, 45%),
-		0 16px 32px rgba(0, 0, 0, 50%);
-	--bg: #121420;
-	--card-bg: #1c1f2e;
-	--border: #2a2e42;
-}
+  --accent: #4a90d9;
+  --accent-dark: #357abd;
+  --black: 30, 30, 30;
+  --gray: 130, 130, 130;
+  --gray-light: 230, 230, 230;
+  --gray-dark: 60, 60, 60;
+  --gray-gradient: rgba(230, 230, 230, 50%), #f5f5f5;
+  --box-shadow:
+   0 2px 6px rgba(0, 0, 0, 8%), 0 8px 24px rgba(0, 0, 0, 10%),
+   0 16px 32px rgba(0, 0, 0, 8%);
+  --bg: #f5f5f5;
+  --card-bg: #ffffff;
+  --border: #e0e0e0;
+ }
 body {
 	font-family: var(--font-atkinson);
 	margin: 0;
