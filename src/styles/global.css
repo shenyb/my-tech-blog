@@ -61,7 +61,7 @@ main {
 	min-height: auto;
 }
 .page.layout .sidebar {
-	width: 220px;
+	width: 260px;
 	flex-shrink: 0;
 	position: sticky;
 	top: 1em;

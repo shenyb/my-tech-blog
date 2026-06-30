@@ -12,6 +12,12 @@ const allPosts = (await getCollection('blog')).sort(
 
 const posts = allPosts.filter(p => p.data.tags && p.data.tags.length > 0);
 const allTags = [...new Set(posts.flatMap(p => p.data.tags || []))].sort();
+
+// 计算每个标签的文章数
+const tagCount: Record<string, number> = {};
+for (const tag of allTags) {
+	tagCount[tag] = posts.filter(p => p.data.tags?.includes(tag)).length;
+}
 ---
 
 <!doctype html>
@@ -24,9 +30,9 @@ const allTags = [...new Set(posts.flatMap(p => p.data.tags || []))].sort();
 		<div class="page layout">
 			<!-- 左侧：文章列表 -->
 			<main>
-				<div class="list">
+				<div class="list" id="post-list">
 					{posts.map((post) => (
-						<a href={`/blog/${post.id}/`} class="item">
+						<a href={`/blog/${post.id}/`} class="item" data-tags={(post.data.tags || []).join(',')}>
 							<div class="item-body">
 								<h2 class="item-title">{post.data.title}</h2>
 								<p class="item-desc">{post.data.description}</p>
@@ -53,23 +59,48 @@ const allTags = [...new Set(posts.flatMap(p => p.data.tags || []))].sort();
 
 			<!-- 右侧：目录 -->
 			<aside class="sidebar">
-				<h3 class="sidebar-title">📋 分类</h3>
-				<nav class="sidebar-nav">
-					<a href="/blog" class="sidebar-item active">
-						<span class="sidebar-item-title">全部文章</span>
-						<span class="sidebar-count">{posts.length}</span>
-					</a>
-					{allTags.map((tag) => (
-						<div class="sidebar-item sidebar-tag">
-							<span class="sidebar-item-title">{tag}</span>
-						</div>
-					))}
-				</nav>
+			 <h3 class="sidebar-title">📋 分类</h3>
+			 <nav class="sidebar-nav">
+			  <a href="/blog" class="sidebar-item active" data-tag="all">
+			   <span class="sidebar-item-title">全部文章（{posts.length}）</span>
+			  </a>
+			  {allTags.map((tag) => (
+			   <a href="/blog" class="sidebar-item sidebar-tag" data-tag={tag}>
+			    <span class="sidebar-item-title">{tag}（{tagCount[tag]}）</span>
+			   </a>
+			  ))}
+			 </nav>
 			</aside>
 		</div>
 		<Footer />
 	</body>
 </html>
+
+<script>
+	// 分类标签筛选
+	document.addEventListener('click', (e) => {
+		const tagItem = e.target.closest('[data-tag]');
+		if (!tagItem) return;
+		e.preventDefault();
+
+		const tag = tagItem.dataset.tag;
+		const items = document.querySelectorAll('#post-list .item');
+		const navItems = document.querySelectorAll('.sidebar-nav [data-tag]');
+
+		// 更新导航高亮
+		navItems.forEach(n => n.classList.remove('active'));
+		tagItem.classList.add('active');
+
+		// 筛选文章
+		items.forEach(item => {
+			if (tag === 'all' || item.dataset.tags.includes(tag)) {
+				item.style.display = 'flex';
+			} else {
+				item.style.display = 'none';
+			}
+		});
+	});
+</script>
 
 <style>
 	.layout {
@@ -181,6 +212,11 @@ const allTags = [...new Set(posts.flatMap(p => p.data.tags || []))].sort();
 	 color: rgb(var(--gray));
 	 margin: 0 0 0.8em 0;
 	 font-weight: 600;
+	 position: sticky;
+	 top: 0;
+	 background: var(--bg);
+	 padding-bottom: 0.5em;
+	 z-index: 1;
 	}
 	.sidebar-nav {
 	 display: flex;

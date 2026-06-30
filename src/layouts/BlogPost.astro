@@ -66,11 +66,16 @@ const { title, description, pubDate, tags, sidebarPosts = [] } = Astro.props;
 <style>
 	/* ===== 右侧边栏目录 ===== */
 	.sidebar-title {
-		font-size: 0.85em;
-		color: rgb(var(--gray));
-		margin: 0 0 0.8em 0;
-		font-weight: 600;
-	}
+	  font-size: 0.85em;
+	  color: rgb(var(--gray));
+	  margin: 0 0 0.8em 0;
+	  font-weight: 600;
+	  position: sticky;
+	  top: 0;
+	  background: var(--bg);
+	  padding-bottom: 0.5em;
+	  z-index: 1;
+	 }
 	.sidebar-nav {
 		display: flex;
 		flex-direction: column;
@@ -94,14 +99,19 @@ const { title, description, pubDate, tags, sidebarPosts = [] } = Astro.props;
 		border-left-color: var(--accent);
 	}
 	.sidebar-item-title {
-		font-size: 0.78em;
-		color: rgb(var(--gray-dark));
-		line-height: 1.3;
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-	}
+	  font-size: 0.78em;
+	  color: rgb(var(--gray-dark));
+	  line-height: 1.3;
+	  display: -webkit-box;
+	  -webkit-line-clamp: 2;
+	  -webkit-box-orient: vertical;
+	  overflow: hidden;
+	 }
+	 .sidebar-item:hover .sidebar-item-title {
+	  -webkit-line-clamp: unset;
+	  display: block;
+	  overflow: visible;
+	 }
 	.sidebar-item.active .sidebar-item-title {
 		color: var(--accent);
 		font-weight: 600;
