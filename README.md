@@ -61,3 +61,10 @@ Check out [our documentation](https://docs.astro.build) or jump into our [Discor
 ## Credit
 
 This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+
+---
+
+📬 **更多平台**
+
+- 💬 掘金：[申延彬的技术文章](https://juejin.cn/user/920709300225227/posts)
+- 🧑‍💼 知乎：[申延彬的知乎主页](https://www.zhihu.com/people/shen-bin-88-64/posts)
