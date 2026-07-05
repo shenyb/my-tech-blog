@@ -189,6 +189,3 @@ plugins/security/patches/    → 追加 YAML、注入 POM 依赖、Flyway 脚本
 工程化的价值，不在于代码写得有多炫，而在于**每次开工少踩同样的坑**。
 
 solo-spring-scaffold 把我这几年做 Spring Boot 项目反复复制的基建，打包成可复用的模板和插件。希望它能帮你把「搭架子」的时间，压缩到 30 秒，把精力留给真正有价值的业务逻辑。
-
-👉 **GitHub 地址**：https://github.com/shenyb/solo-spring-scaffold  
-👉 **给个 Star**，是对开源作者最好的鼓励

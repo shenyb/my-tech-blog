@@ -5,16 +5,36 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
+import { SCAFFOLD_GITHUB_URL, ZHIHU_URL } from '../consts';
+
 type Props = CollectionEntry<'blog'>['data'] & {
 	sidebarPosts?: CollectionEntry<'blog'>[];
 };
 
 const { title, description, pubDate, tags, sidebarPosts = [] } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <html lang="zh-CN">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead
+			title={title}
+			description={description}
+			type="article"
+			pubDate={pubDate}
+			tags={tags}
+		/>
+		<script type="application/ld+json" set:html={JSON.stringify({
+			'@context': 'https://schema.org',
+			'@type': 'BlogPosting',
+			headline: title,
+			description,
+			datePublished: pubDate.toISOString(),
+			author: { '@type': 'Person', name: '申延彬' },
+			publisher: { '@type': 'Organization', name: '干货·工程化复盘' },
+			mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalURL.href },
+			keywords: tags?.join(', '),
+		})} />
 	</head>
 
 	<body>
@@ -40,6 +60,21 @@ const { title, description, pubDate, tags, sidebarPosts = [] } = Astro.props;
 					<div class="content">
 						<slot />
 					</div>
+
+					<footer class="article-footer">
+						<hr />
+						<p>
+							👉 <strong>GitHub 地址</strong>：
+							<a href={SCAFFOLD_GITHUB_URL} target="_blank" rel="noopener noreferrer">
+								{SCAFFOLD_GITHUB_URL}
+							</a>
+						</p>
+						<p>👉 <strong>给个 Star</strong>，是对开源作者最好的鼓励</p>
+						<p>
+							👉 <strong>知乎</strong>
+							<a href={ZHIHU_URL} target="_blank" rel="noopener noreferrer">{ZHIHU_URL}</a>
+						</p>
+					</footer>
 				</article>
 			</main>
 
@@ -284,6 +319,29 @@ const { title, description, pubDate, tags, sidebarPosts = [] } = Astro.props;
 	}
 	.content :global(blockquote code) {
 		background: var(--bg);
+	}
+
+	.article-footer {
+		margin-top: 2.5em;
+		padding-top: 0.5em;
+	}
+	.article-footer hr {
+		margin: 0 0 1.5em 0;
+		border: none;
+		border-top: 1px solid var(--border);
+	}
+	.article-footer p {
+		margin: 0 0 0.6em 0;
+		font-size: 0.95em;
+		color: rgb(var(--gray-dark));
+	}
+	.article-footer a {
+		color: var(--accent);
+		text-decoration: none;
+		word-break: break-all;
+	}
+	.article-footer a:hover {
+		text-decoration: underline;
 	}
 
 	/* ===== 响应式 ===== */
