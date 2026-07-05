@@ -3,6 +3,7 @@ title: '用 Cloudflare Pages 免费搭建个人技术博客'
 description: '从零开始，使用 Astro + Cloudflare Pages 搭建一个免费、快速的个人技术博客站点'
 pubDate: 2024-12-01
 heroImage: ''
+category: engineering
 tags: ['Cloudflare', 'Astro', '部署']
 ---
 

@@ -3,6 +3,7 @@ title: 'Spring Boot 项目最佳实践总结'
 description: 'Spring Boot 项目开发中的规范、配置和最佳实践'
 pubDate: 2024-11-15
 heroImage: ''
+category: engineering
 tags: ['Java', 'Spring Boot', '最佳实践']
 ---
 

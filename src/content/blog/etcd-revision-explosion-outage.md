@@ -2,6 +2,7 @@
 title: 'etcd Revision 爆炸外呼瘫痪复盘：4000 万条历史版本撑爆 8GB 存储'
 description: '一个 --auto-compaction-retention 参数没配，etcd 4000 万条历史版本撑爆 8GB 存储，602 个坐席打不了电话的完整复盘'
 pubDate: 2026-06-29
+category: incident
 tags: ['etcd', '分布式', '存储', '事故复盘', 'Linux']
 ---
 

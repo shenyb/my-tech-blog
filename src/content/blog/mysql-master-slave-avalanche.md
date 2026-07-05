@@ -2,6 +2,7 @@
 title: 'MySQL 主从切换引发话务服务雪崩 9 小时：共享线程池 + 默认 JVM + WMB 重试连环引爆'
 description: '上游 MySQL 主从切换引发接口超时，共享线程池 + 默认 JVM + WMB 自动重试三颗雷连环引爆，话务服务雪崩 9 小时的完整复盘'
 pubDate: 2026-06-29
+category: incident
 tags: ['MySQL', 'JVM', '线程池', '消息队列', '事故复盘', 'Java']
 ---
 

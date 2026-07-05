@@ -2,6 +2,7 @@
 title: '交换机故障后 2000 容器起不来：Dragonfly P2P 缓存雪崩复盘'
 description: '交换机故障导致 100 多台物理机断网，containerd 环境下 Dragonfly P2P 缓存清空，2000 个容器挂了一小时的复盘'
 pubDate: 2026-06-29
+category: incident
 tags: ['Dragonfly', 'P2P', '容器', 'Kubernetes', 'containerd', '事故复盘']
 ---
 

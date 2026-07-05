@@ -2,6 +2,7 @@
 title: '一次线上接口超时，我追了四个方向，最后什么都没查出来'
 description: '监控报了几十次接口超时，从调用方日志、服务方日志、MySQL 慢 SQL、JVM Full GC 四个方向逐一排查，最后落在一个没有结论的推测上'
 pubDate: 2026-06-29
+category: incident
 tags: ['排查思路', 'MySQL', 'JVM', '接口超时', '事故复盘', 'Java']
 ---
 

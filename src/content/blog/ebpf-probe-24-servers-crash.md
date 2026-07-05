@@ -2,6 +2,7 @@
 title: '一个监控探针炸了 24 台服务器：eBPF 是把双刃剑'
 description: 'CentOS 4.18 内核的 eBPF 上下文清理 bug 导致 24 台物理机内核崩溃、900 个 Pod 被重建的完整复盘'
 pubDate: 2026-06-29
+category: incident
 tags: ['eBPF', '内核', '监控', '事故复盘', 'Linux']
 ---
 
