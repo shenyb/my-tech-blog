@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
-import { SCAFFOLD_GITHUB_URL, ZHIHU_URL } from '../consts';
+import { JUEJIN_URL, SCAFFOLD_GITHUB_URL, ZHIHU_URL } from '../consts';
 
 type Props = CollectionEntry<'blog'>['data'] & {
 	sidebarPosts?: CollectionEntry<'blog'>[];
@@ -73,6 +73,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 						<p>
 							👉 <strong>知乎</strong>
 							<a href={ZHIHU_URL} target="_blank" rel="noopener noreferrer">{ZHIHU_URL}</a>
+						</p>
+						<p>
+							👉 <strong>掘金</strong>
+							<a href={JUEJIN_URL} target="_blank" rel="noopener noreferrer">{JUEJIN_URL}</a>
 						</p>
 					</footer>
 				</article>

@@ -5,4 +5,5 @@ export const SITE_AUTHOR = '申延彬';
 export const GITHUB_URL = 'https://github.com/shenyb';
 export const SCAFFOLD_GITHUB_URL = 'https://github.com/shenyb/solo-spring-scaffold';
 export const ZHIHU_URL = 'https://www.zhihu.com/people/shen-bin-88-64/posts';
+export const JUEJIN_URL = 'https://juejin.cn/user/920709300225227/posts';
 export const EMAIL = '';
