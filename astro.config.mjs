@@ -7,6 +7,11 @@ import { defineConfig, fontProviders } from 'astro/config';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://ganhuo.dev',
+	markdown: {
+		shikiConfig: {
+			theme: 'github-light',
+		},
+	},
 	integrations: [mdx(), sitemap()],
 	fonts: [
 		{
