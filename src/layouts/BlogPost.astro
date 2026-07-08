@@ -272,7 +272,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 	.content :global(pre code) {
 		all: unset;
 		display: block;
-		color: rgb(var(--gray-dark));
+		/* 继承 Shiki 在 pre 上内联的前景色（github-dark 为浅色）。
+		   之前强制 gray-dark 会让无语言标注的纯文本代码块变成深字配深底，看不清 */
+		color: inherit;
 	}
 	.content :global(img) {
 		display: block;
