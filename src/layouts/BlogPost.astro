@@ -6,6 +6,7 @@ import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
 import {
+	EMAIL,
 	JUEJIN_URL,
 	SCAFFOLD_GITHUB_URL,
 	WORKSPACE_GITHUB_URL,
@@ -84,6 +85,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 							<a href={ZHIHU_URL} target="_blank" rel="noopener noreferrer">知乎</a>
 							·
 							<a href={JUEJIN_URL} target="_blank" rel="noopener noreferrer">掘金</a>
+						</p>
+						<p>
+							👉 <strong>联系</strong>：
+							<a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+							（合作 / 线上问题交流欢迎来信）
 						</p>
 					</footer>
 				</article>

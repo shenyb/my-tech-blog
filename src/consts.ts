@@ -8,4 +8,4 @@ export const WORKSPACE_GITHUB_URL = 'https://github.com/shenyb/solo-workspace';
 export const SCAFFOLD_GITHUB_URL = 'https://github.com/shenyb/solo-spring-scaffold';
 export const ZHIHU_URL = 'https://www.zhihu.com/people/shen-bin-88-64/posts';
 export const JUEJIN_URL = 'https://juejin.cn/user/920709300225227/posts';
-export const EMAIL = '';
+export const EMAIL = 'shenyanbin1234@gmail.com';
