@@ -325,6 +325,9 @@ for (List<ClusterIpWarmup> warmupList : warmupLists) {
 
 一晚上的感受总结成一句话：**AI 把"翻日志"从体力活变成了描述问题的能力测试**——你能把背景讲多清楚，它就能挖多快。
 
+如果更关心「日常写业务 / 搭项目时同一套分工怎么用」，可以看方法论短文：  
+👉 [Java 后端在 AI 时代怎么提效：不是多会一个工具，是重新分工](/blog/java-ai-efficiency-human-division/)
+
 ---
 
 ## 💡 写在最后：三条带得走的经验
