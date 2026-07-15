@@ -1,16 +1,35 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import {
+	JUEJIN_URL,
+	SCAFFOLD_GITHUB_URL,
+	SITE_DESCRIPTION,
+	SITE_TITLE,
+	WORKSPACE_GITHUB_URL,
+	ZHIHU_URL,
+} from '../consts';
 
 const allPosts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 const latestPosts = allPosts.slice(0, 5);
+
+const projects = [
+	{
+		name: 'Solo Workspace',
+		desc: '独立开发者 CLI：服务器 / 域名 / SSL / 密钥 / 待办一站管理',
+		href: WORKSPACE_GITHUB_URL,
+	},
+	{
+		name: 'solo-spring-scaffold',
+		desc: 'Spring Boot 3 多模块脚手架，插件化 JWT / Docker / Redis / 测试',
+		href: SCAFFOLD_GITHUB_URL,
+	},
+];
 ---
 
 <!doctype html>
@@ -32,13 +51,15 @@ const latestPosts = allPosts.slice(0, 5);
 		<Header />
 		<div class="page">
 			<main>
-			<!-- Hero：一行标题 -->
 			<section class="hero">
 				<h1>别人教<span class="hl">怎么写</span>，我们教<span class="hl">怎么不出事</span></h1>
-				<p>事故复盘 · 工程化实战 · 生产环境经验</p>
+				<p class="tagline">事故复盘 · 工程化实战 · 生产环境经验</p>
+				<p class="intro">
+					我是 <strong>申延彬</strong>，Java 后端，一线写过方案也排过障。
+					这里沉淀<strong>真实生产事故</strong>与排查思路；业余做开源工具，把重复劳动压成脚手架和 CLI。
+				</p>
 			</section>
 
-			<!-- 入口卡片：三列横铺 -->
 			<section class="entries">
 				<a href="/about" class="entry">
 					<span>📖</span>
@@ -57,34 +78,51 @@ const latestPosts = allPosts.slice(0, 5);
 				</a>
 			</section>
 
-			<!-- 最新文章 -->
-			<section class="latest">
-				{latestPosts.length > 0 && (
-					<>
-						{latestPosts.map((post) => (
+			<section class="block">
+				<div class="block-head">
+					<h2>最新文章</h2>
+					<a href="/blog" class="block-more">全部 {allPosts.length} 篇 →</a>
+				</div>
+				<div class="latest">
+					{latestPosts.length > 0 &&
+						latestPosts.map((post) => (
 							<a href={`/blog/${post.id}/`} class="post-item">
 								<span class="post-title">{post.data.title}</span>
-								<span class="post-date"><FormattedDate date={post.data.pubDate} /></span>
+								<span class="post-date">
+									<FormattedDate date={post.data.pubDate} />
+								</span>
 							</a>
 						))}
-						{allPosts.length > 5 && (
-							<a href="/blog" class="post-more">查看全部 {allPosts.length} 篇 →</a>
-						)}
-					</>
-				)}
-				{latestPosts.length === 0 && (
-					<p class="empty">文章正在路上……</p>
-				)}
+					{latestPosts.length === 0 && <p class="empty">文章正在路上……</p>}
+				</div>
 			</section>
 
-			<!-- 友情链接 -->
+			<section class="block">
+				<div class="block-head">
+					<h2>开源项目</h2>
+					<a href="https://github.com/shenyb" class="block-more" target="_blank" rel="noopener noreferrer">
+						GitHub →
+					</a>
+				</div>
+				<div class="projects">
+					{projects.map((p) => (
+						<a href={p.href} class="project" target="_blank" rel="noopener noreferrer">
+							<span class="project-name">{p.name}</span>
+							<span class="project-desc">{p.desc}</span>
+						</a>
+					))}
+				</div>
+			</section>
+
 			<section class="friend-links">
-				<span class="fl-label">友链</span>
-				<a href="https://tech.meituan.com/" target="_blank">美团技术</a>
-				<a href="https://coolshell.cn/" target="_blank">酷壳</a>
-				<a href="https://www.ruanyifeng.com/blog/" target="_blank">阮一峰</a>
-				<a href="https://www.infoq.cn/" target="_blank">InfoQ</a>
-				<a href="https://aws.amazon.com/cn/blogs/architecture/" target="_blank">AWS 架构</a>
+				<span class="fl-label">其它平台</span>
+				<a href={ZHIHU_URL} target="_blank" rel="noopener noreferrer">知乎</a>
+				<a href={JUEJIN_URL} target="_blank" rel="noopener noreferrer">掘金</a>
+				<span class="fl-label fl-gap">友链</span>
+				<a href="https://tech.meituan.com/" target="_blank" rel="noopener noreferrer">美团技术</a>
+				<a href="https://coolshell.cn/" target="_blank" rel="noopener noreferrer">酷壳</a>
+				<a href="https://www.ruanyifeng.com/blog/" target="_blank" rel="noopener noreferrer">阮一峰</a>
+				<a href="https://www.infoq.cn/" target="_blank" rel="noopener noreferrer">InfoQ</a>
 			</section>
 		</main>
 		</div>
@@ -93,35 +131,44 @@ const latestPosts = allPosts.slice(0, 5);
 </html>
 
 <style>
-	/* ===== 全局：一屏紧凑 ===== */
 	main {
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
-		gap: 1.2em;
+		gap: 1.4em;
+		padding: 2em 1em 3em;
 		min-height: calc(100vh - 110px);
-		padding: 2em 1em;
 	}
 
-	/* ===== Hero ===== */
 	.hero {
 		text-align: center;
 	}
 	.hero h1 {
 		font-size: 1.6em;
 		line-height: 1.3;
-		margin: 0 0 0.2em 0;
+		margin: 0 0 0.25em 0;
 		color: rgb(var(--black));
 	}
-	.hl { color: var(--accent); }
-	.hero p {
+	.hl {
+		color: var(--accent);
+	}
+	.tagline {
 		font-size: 0.85em;
 		color: rgb(var(--gray));
-		margin: 0;
-		letter-spacing: 0.25em;
+		margin: 0 0 0.9em 0;
+		letter-spacing: 0.2em;
+	}
+	.intro {
+		max-width: 36em;
+		margin: 0 auto;
+		font-size: 0.9em;
+		line-height: 1.75;
+		color: rgb(var(--gray-dark));
+		text-align: left;
+	}
+	.intro strong {
+		color: rgb(var(--black));
 	}
 
-	/* ===== 入口卡片：三列横铺 ===== */
 	.entries {
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
@@ -141,7 +188,9 @@ const latestPosts = allPosts.slice(0, 5);
 	.entry:hover {
 		border-color: var(--accent);
 	}
-	.entry span:nth-child(1) { font-size: 1.1em; }
+	.entry span:nth-child(1) {
+		font-size: 1.1em;
+	}
 	.entry span:nth-child(2) {
 		flex: 1;
 		font-weight: 600;
@@ -153,20 +202,29 @@ const latestPosts = allPosts.slice(0, 5);
 		color: var(--accent);
 		font-size: 0.9em;
 	}
-	.entry-disabled {
-		opacity: 0.55;
-		cursor: default;
+
+	.block-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1em;
+		margin-bottom: 0.5em;
 	}
-	.entry-disabled:hover {
-		border-color: var(--border);
+	.block-head h2 {
+		margin: 0;
+		font-size: 0.95em;
+		color: rgb(var(--black));
 	}
-	.entry-disabled .coming {
-		font-size: 0.7em;
-		color: rgb(var(--gray));
-		white-space: nowrap;
+	.block-more {
+		font-size: 0.78em;
+		color: var(--accent);
+		text-decoration: none;
+		flex-shrink: 0;
+	}
+	.block-more:hover {
+		text-decoration: underline;
 	}
 
-	/* ===== 最新文章 ===== */
 	.latest {
 		display: flex;
 		flex-direction: column;
@@ -200,17 +258,6 @@ const latestPosts = allPosts.slice(0, 5);
 		color: rgb(var(--gray));
 		flex-shrink: 0;
 	}
-	.post-more {
-		display: block;
-		text-align: center;
-		font-size: 0.82em;
-		padding: 0.4em;
-		color: var(--accent);
-		text-decoration: none;
-	}
-	.post-more:hover {
-		text-decoration: underline;
-	}
 	.empty {
 		text-align: center;
 		font-size: 0.85em;
@@ -219,18 +266,54 @@ const latestPosts = allPosts.slice(0, 5);
 		padding: 0.5em;
 	}
 
-	/* ===== 友链 ===== */
+	.projects {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.7em;
+	}
+	.project {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35em;
+		padding: 0.9em 1em;
+		background: var(--card-bg);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		text-decoration: none;
+		transition: border-color 0.15s;
+	}
+	.project:hover {
+		border-color: var(--accent);
+	}
+	.project-name {
+		font-size: 0.88em;
+		font-weight: 600;
+		color: rgb(var(--black));
+	}
+	.project:hover .project-name {
+		color: var(--accent);
+	}
+	.project-desc {
+		font-size: 0.78em;
+		line-height: 1.45;
+		color: rgb(var(--gray));
+	}
+
 	.friend-links {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		gap: 0.6em;
 		flex-wrap: wrap;
+		padding-top: 0.3em;
 	}
 	.fl-label {
 		font-size: 0.72em;
 		color: rgb(var(--gray));
 		opacity: 0.5;
+	}
+	.fl-gap {
+		margin-left: 0.4em;
 	}
 	.friend-links a {
 		font-size: 0.72em;
@@ -241,10 +324,19 @@ const latestPosts = allPosts.slice(0, 5);
 		color: var(--accent);
 	}
 
-	/* ===== 响应式 ===== */
 	@media (max-width: 720px) {
-		.hero h1 { font-size: 1.3em; }
-		.hero p { letter-spacing: 0.1em; font-size: 0.75em; }
-		.entry-row { grid-template-columns: 1fr; }
+		.hero h1 {
+			font-size: 1.3em;
+		}
+		.tagline {
+			letter-spacing: 0.1em;
+			font-size: 0.75em;
+		}
+		.entries {
+			grid-template-columns: 1fr;
+		}
+		.projects {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

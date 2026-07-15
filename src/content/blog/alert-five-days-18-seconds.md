@@ -340,13 +340,3 @@ for (List<ClusterIpWarmup> warmupList : warmupLists) {
 这次排查前后翻了两台机器、三个服务、大约 60G 的日志，工具只有 grep——和一个会自己写 grep 的 AI。但方法比工具重要：先确认实体身份，再找第一案发现场，沿时间线收敛，正向查不到就上反证法。如果你也在维护类似的服务发现或数据同步链路，希望这条 Bug 链能帮你提前排掉几颗雷。
 
 你们有没有遇到过"缓存把正经操作当成重复操作吞掉"的案例？或者更离谱的数据残留？评论区聊聊。
-
----
-
-👉 GitHub 地址： https://github.com/shenyb/solo-spring-scaffold
-
-👉 给个 Star，是对开源作者最好的鼓励
-
-👉 知乎 https://www.zhihu.com/people/shen-bin-88-64/posts
-
-👉 掘金 https://juejin.cn/user/920709300225227/posts

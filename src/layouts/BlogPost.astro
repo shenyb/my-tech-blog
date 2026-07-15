@@ -5,7 +5,13 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
-import { JUEJIN_URL, SCAFFOLD_GITHUB_URL, ZHIHU_URL } from '../consts';
+import {
+	JUEJIN_URL,
+	SCAFFOLD_GITHUB_URL,
+	WORKSPACE_GITHUB_URL,
+	ZHIHU_URL,
+} from '../consts';
+
 
 type Props = CollectionEntry<'blog'>['data'] & {
 	sidebarPosts?: CollectionEntry<'blog'>[];
@@ -63,20 +69,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 					<footer class="article-footer">
 						<hr />
-						<p>
-							👉 <strong>GitHub 地址</strong>：
-							<a href={SCAFFOLD_GITHUB_URL} target="_blank" rel="noopener noreferrer">
-								{SCAFFOLD_GITHUB_URL}
-							</a>
-						</p>
-						<p>👉 <strong>给个 Star</strong>，是对开源作者最好的鼓励</p>
-						<p>
-							👉 <strong>知乎</strong>
-							<a href={ZHIHU_URL} target="_blank" rel="noopener noreferrer">{ZHIHU_URL}</a>
+						<p class="footer-intro">
+							我是 <strong>申延彬</strong>，Java 后端。这里写生产事故复盘与工程化实战；业余做开源工具。
 						</p>
 						<p>
-							👉 <strong>掘金</strong>
-							<a href={JUEJIN_URL} target="_blank" rel="noopener noreferrer">{JUEJIN_URL}</a>
+							👉 <strong>开源</strong>：
+							<a href={WORKSPACE_GITHUB_URL} target="_blank" rel="noopener noreferrer">Solo Workspace</a>
+							（独立开发者 CLI）·
+							<a href={SCAFFOLD_GITHUB_URL} target="_blank" rel="noopener noreferrer">solo-spring-scaffold</a>
+							（Spring Boot 脚手架）
+						</p>
+						<p>
+							👉 <strong>其它平台</strong>：
+							<a href={ZHIHU_URL} target="_blank" rel="noopener noreferrer">知乎</a>
+							·
+							<a href={JUEJIN_URL} target="_blank" rel="noopener noreferrer">掘金</a>
 						</p>
 					</footer>
 				</article>
@@ -341,10 +348,13 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		font-size: 0.95em;
 		color: rgb(var(--gray-dark));
 	}
+	.article-footer .footer-intro {
+		margin-bottom: 0.9em;
+		line-height: 1.7;
+	}
 	.article-footer a {
 		color: var(--accent);
 		text-decoration: none;
-		word-break: break-all;
 	}
 	.article-footer a:hover {
 		text-decoration: underline;
