@@ -7,6 +7,9 @@ import { defineConfig, fontProviders } from 'astro/config';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://ganhuo.dev',
+	// 与 Cloudflare Pages 静态目录部署一致：统一使用尾斜杠，避免 /blog → 308 → /blog/
+	// 否则 Google 会把无尾斜杠 URL 标为「重定向页面」而不索引该 URL
+	trailingSlash: 'always',
 	markdown: {
 		shikiConfig: {
 			theme: 'github-light',

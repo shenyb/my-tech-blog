@@ -58,11 +58,11 @@ for (const tag of allTags) {
 			<aside class="sidebar">
 			 <h3 class="sidebar-title">📋 分类</h3>
 			 <nav class="sidebar-nav">
-			  <a href="/practice" class="sidebar-item active" data-tag="all">
+			  <a href="/practice/" class="sidebar-item active" data-tag="all">
 			   <span class="sidebar-item-title">全部文章（{posts.length}）</span>
 			  </a>
 			  {allTags.map((tag) => (
-			   <a href="/practice" class="sidebar-item sidebar-tag" data-tag={tag}>
+			   <a href="/practice/" class="sidebar-item sidebar-tag" data-tag={tag}>
 			    <span class="sidebar-item-title">{tag}（{tagCount[tag]}）</span>
 			   </a>
 			  ))}
