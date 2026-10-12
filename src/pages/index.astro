@@ -76,6 +76,11 @@ const projects = [
 					<span>工程化实践</span>
 					<span>→</span>
 				</a>
+				<a href="/ai/" class="entry">
+					<span>🤖</span>
+					<span>AI 实战</span>
+					<span>→</span>
+				</a>
 			</section>
 
 			<section class="block">
@@ -171,7 +176,7 @@ const projects = [
 
 	.entries {
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-columns: repeat(4, 1fr);
 		gap: 0.7em;
 	}
 	.entry {
@@ -324,7 +329,13 @@ const projects = [
 		color: var(--accent);
 	}
 
-	@media (max-width: 720px) {
+	@media (max-width: 820px) {
+		.entries {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	@media (max-width: 540px) {
 		.hero h1 {
 			font-size: 1.3em;
 		}
