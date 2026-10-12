@@ -2,8 +2,8 @@
 title: 'Java 后端在 AI 时代怎么提效：不是多会一个工具，是重新分工'
 description: '从一次 60G 日志、五环 Bug 的人机排查里提炼：Java 后端哪些事该交给 AI、哪些必须自己把关，以及脚手架/规范为什么比 Prompt 更值钱'
 pubDate: 2026-07-14
-category: engineering
-tags: ['AI编程', 'Java', 'Claude', '工程化', '排查思路', '人机协作']
+category: ai
+tags: ['AI提效', 'Java', 'Claude', '排查思路', '人机协作', '工程化']
 ---
 
 # Java 后端在 AI 时代怎么提效：不是多会一个工具，是重新分工
