@@ -58,13 +58,13 @@ for (const tag of allTags) {
 			<aside class="sidebar">
 			 <h3 class="sidebar-title">📋 分类</h3>
 			 <nav class="sidebar-nav">
-			  <a href="/practice/" class="sidebar-item active" data-tag="all">
+			  <button type="button" class="sidebar-item active" data-tag="all">
 			   <span class="sidebar-item-title">全部文章（{posts.length}）</span>
-			  </a>
+			  </button>
 			  {allTags.map((tag) => (
-			   <a href="/practice/" class="sidebar-item sidebar-tag" data-tag={tag}>
+			   <button type="button" class="sidebar-item sidebar-tag" data-tag={tag}>
 			    <span class="sidebar-item-title">{tag}（{tagCount[tag]}）</span>
-			   </a>
+			   </button>
 			  ))}
 			 </nav>
 			</aside>
@@ -75,9 +75,8 @@ for (const tag of allTags) {
 
 <script>
 	document.addEventListener('click', (e) => {
-		const tagItem = e.target.closest('[data-tag]');
+		const tagItem = e.target.closest('.sidebar-nav [data-tag]');
 		if (!tagItem) return;
-		e.preventDefault();
 
 		const tag = tagItem.dataset.tag;
 		const items = document.querySelectorAll('#post-list .item');
@@ -87,7 +86,7 @@ for (const tag of allTags) {
 		tagItem.classList.add('active');
 
 		items.forEach(item => {
-			if (tag === 'all' || item.dataset.tags.includes(tag)) {
+			if (tag === 'all' || item.dataset.tags.split(',').includes(tag)) {
 				item.style.display = 'flex';
 			} else {
 				item.style.display = 'none';
@@ -214,6 +213,15 @@ for (const tag of allTags) {
 	 display: flex;
 	 flex-direction: column;
 	 gap: 0.2em;
+	}
+	/* 标签是 button，清掉浏览器默认按钮样式，保持和链接项一致 */
+	:where(button.sidebar-item) {
+		width: 100%;
+		border: none;
+		background: none;
+		font: inherit;
+		text-align: left;
+		cursor: pointer;
 	}
 	.sidebar-item {
 	 display: flex;
