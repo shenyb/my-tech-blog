@@ -183,4 +183,19 @@ osascript -e 'tell application "Google Chrome" to execute front window'"'"'s act
 
 我现在最常用的组合是：**用 MCP 摸清楚平台接口，再写成调接口的脚本，沉淀成 Skill。** 不管用哪种方式，都要记住一件事：**AI 在你的浏览器里做的每一件事，都会算在你头上。**
 
-**下一篇**：让 AI 登录线上机器查日志，怎么做到既方便又不越界？
+---
+
+## 系列结束语
+
+《老登让 AI 接管日常工作》系列到这一篇就结束了。回头看这六篇，AI 真正接管的是**体力活**：写方案初稿、跑对账、修环境、读代码、写代码、点页面。而有几件事，从头到尾都没有交出去：**定边界、做取舍、核对结果，以及为最后的决定负责。**
+
+六篇的完整目录：
+
+1. [AI 半小时写完 9 章重构方案？真正值钱的是后面那几次追问](/blog/ai-design-doc-human-judge/)
+2. [8.5 万个模型分三方对账：一个 Agent Skill 是怎么从跑不完改到 20 分钟的](/blog/ai-skill-ab-reconciliation/)
+3. [服务器一升级，24 个流量复制任务全挂：AI 15 分钟查清根因，之后一句话修好](/blog/ai-skill-tcpcopy-self-heal/)
+4. [接手两个陌生的老系统：AI 4 分钟写完架构文档，我花了 25 天才真正看懂](/blog/ai-read-legacy-system/)
+5. [一个跨两个服务的小需求：AI 写代码只用了 6 分钟，剩下一天半花在了哪](/blog/ai-cross-service-requirement/)
+6. AI 是怎么操作你的浏览器的？（本篇）
+
+系列的起点是这篇总览：[干了十几年 Java 的老登，我都让 AI 接管了哪些日常工作？](/blog/java-veteran-ai-workflow-in-depth/)
