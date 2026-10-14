@@ -16,9 +16,11 @@ const allPosts = await getCollection('blog');
 const sidebarPosts = allPosts
 	.filter(p => p.data.category === post.data.category && p.data.tags && p.data.tags.length > 0)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+// 章节目录只取二、三级标题（一级标题是正文里重复的文章名）
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
-<BlogPost {...post.data} sidebarPosts={sidebarPosts}>
+<BlogPost {...post.data} sidebarPosts={sidebarPosts} headings={tocHeadings}>
 	<Content />
 </BlogPost>

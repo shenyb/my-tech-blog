@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import type { MarkdownHeading } from 'astro';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
@@ -16,9 +17,10 @@ import {
 
 type Props = CollectionEntry<'blog'>['data'] & {
 	sidebarPosts?: CollectionEntry<'blog'>[];
+	headings?: MarkdownHeading[];
 };
 
-const { title, description, pubDate, tags, sidebarPosts = [] } = Astro.props;
+const { title, description, pubDate, tags, sidebarPosts = [], headings = [] } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -42,6 +44,26 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalURL.href },
 			keywords: tags?.join(', '),
 		})} />
+		<script is:inline>
+			// 在首帧渲染前恢复目录折叠状态，避免展开后再收起的闪烁；
+			// 站点启用了 ClientRouter，换页会替换 <html> 属性，所以 after-swap 时再恢复一次
+			(() => {
+				const apply = () => {
+					try {
+						if (localStorage.getItem('toc-collapsed') === '1') {
+							document.documentElement.dataset.toc = 'collapsed';
+						} else {
+							delete document.documentElement.dataset.toc;
+						}
+					} catch (e) {}
+				};
+				apply();
+				if (!window.__tocSwapBound) {
+					window.__tocSwapBound = true;
+					document.addEventListener('astro:after-swap', apply);
+				}
+			})();
+		</script>
 	</head>
 
 	<body>
@@ -97,37 +119,213 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 			<!-- 右侧边栏：文章目录 -->
 			<aside class="sidebar">
-				<h3 class="sidebar-title">📋 目录</h3>
-				<nav class="sidebar-nav">
-					{sidebarPosts.map((p) => {
-						const isActive = p.id === Astro.url.pathname.replace('/blog/', '').replace('/', '');
-						return (
-							<a href={`/blog/${p.id}/`} class={`sidebar-item ${isActive ? 'active' : ''}`}>
-								<span class="sidebar-item-title">{p.data.title}</span>
-								<time class="sidebar-item-date"><FormattedDate date={p.data.date || p.data.pubDate} /></time>
-							</a>
-						);
-					})}
-				</nav>
+				<div class="sidebar-title">
+					<h3 class="sidebar-title-text">📋 目录</h3>
+					<button type="button" class="toc-toggle" aria-label="折叠目录" title="折叠目录" aria-expanded="true">
+						<span class="toc-toggle-icon" aria-hidden="true">»</span>
+					</button>
+				</div>
+				<div class="sidebar-body">
+					{headings.length > 0 && (
+						<section class="toc-section">
+							<h4 class="sidebar-section-title">本文章节</h4>
+							<nav class="chapter-nav">
+								{headings.map((h) => (
+									<a href={`#${h.slug}`} class={`chapter-item depth-${h.depth}`} data-slug={h.slug}>{h.text}</a>
+								))}
+							</nav>
+						</section>
+					)}
+					<section>
+						{headings.length > 0 && <h4 class="sidebar-section-title">相关文章</h4>}
+						<nav class="sidebar-nav">
+							{sidebarPosts.map((p) => {
+								const isActive = p.id === Astro.url.pathname.replace('/blog/', '').replace('/', '');
+								return (
+									<a href={`/blog/${p.id}/`} class={`sidebar-item ${isActive ? 'active' : ''}`}>
+										<span class="sidebar-item-title">{p.data.title}</span>
+										<time class="sidebar-item-date"><FormattedDate date={p.data.date || p.data.pubDate} /></time>
+									</a>
+								);
+							})}
+						</nav>
+					</section>
+				</div>
 			</aside>
 		</div>
 		<Footer />
+		<script>
+			// 模块脚本只执行一次：点击用事件委托，按钮文案在每次换页后同步
+			const root = document.documentElement;
+			const sync = () => {
+				const btn = document.querySelector('.toc-toggle');
+				if (!btn) return;
+				const collapsed = root.dataset.toc === 'collapsed';
+				const label = collapsed ? '展开目录' : '折叠目录';
+				btn.setAttribute('aria-expanded', String(!collapsed));
+				btn.setAttribute('aria-label', label);
+				btn.setAttribute('title', label);
+			};
+			document.addEventListener('click', (e) => {
+				if (!(e.target instanceof Element) || !e.target.closest('.toc-toggle')) return;
+				const collapsed = root.dataset.toc !== 'collapsed';
+				if (collapsed) root.dataset.toc = 'collapsed';
+				else delete root.dataset.toc;
+				try {
+					localStorage.setItem('toc-collapsed', collapsed ? '1' : '0');
+				} catch (err) {}
+				sync();
+			});
+			document.addEventListener('astro:page-load', sync);
+
+			// 章节目录高亮：滚动时标出当前阅读的章节，并让它在侧栏可见区域内
+			let disposeSpy = () => {};
+			const initSpy = () => {
+				disposeSpy();
+				const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.chapter-item'));
+				const targets = links
+					.map((a) => ({ a, el: document.getElementById(a.dataset.slug || '') }))
+					.filter((t): t is { a: HTMLAnchorElement; el: HTMLElement } => t.el !== null);
+				if (targets.length === 0) return;
+				const sidebar = document.querySelector<HTMLElement>('.sidebar');
+				let current: HTMLAnchorElement | null = null;
+				let ticking = false;
+				const update = () => {
+					ticking = false;
+					let next = targets[0].a;
+					for (const t of targets) {
+						if (t.el.getBoundingClientRect().top <= 120) next = t.a;
+						else break;
+					}
+					if (next === current) return;
+					current?.classList.remove('active');
+					next.classList.add('active');
+					current = next;
+					if (sidebar && sidebar.scrollHeight > sidebar.clientHeight) {
+						const top = next.offsetTop;
+						if (top < sidebar.scrollTop || top > sidebar.scrollTop + sidebar.clientHeight - 40) {
+							sidebar.scrollTop = top - sidebar.clientHeight / 3;
+						}
+					}
+				};
+				const onScroll = () => {
+					if (!ticking) {
+						ticking = true;
+						requestAnimationFrame(update);
+					}
+				};
+				window.addEventListener('scroll', onScroll, { passive: true });
+				update();
+				disposeSpy = () => window.removeEventListener('scroll', onScroll);
+			};
+			document.addEventListener('astro:page-load', initSpy);
+			document.addEventListener('astro:before-swap', () => disposeSpy());
+		</script>
 	</body>
 </html>
 
 <style>
 	/* ===== 右侧边栏目录 ===== */
 	.sidebar-title {
-	  font-size: 0.85em;
-	  color: rgb(var(--gray));
+	  display: flex;
+	  align-items: center;
+	  justify-content: space-between;
+	  gap: 0.5em;
 	  margin: 0 0 0.8em 0;
-	  font-weight: 600;
 	  position: sticky;
 	  top: 0;
 	  background: var(--bg);
 	  padding-bottom: 0.5em;
 	  z-index: 1;
 	 }
+	.sidebar-title-text {
+	  font-size: 0.85em;
+	  color: rgb(var(--gray));
+	  margin: 0;
+	  font-weight: 600;
+	  line-height: 1.2;
+	 }
+	.toc-toggle {
+		flex-shrink: 0;
+		width: 28px;
+		height: 28px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		background: var(--card-bg);
+		color: rgb(var(--gray));
+		font-size: 1em;
+		line-height: 1;
+		cursor: pointer;
+		transition: color 0.15s, border-color 0.15s;
+	}
+	.toc-toggle:hover {
+		color: var(--accent);
+		border-color: var(--accent);
+	}
+	.toc-toggle-icon {
+		display: inline-block;
+		transition: transform 0.2s;
+	}
+
+	/* 折叠态：侧栏收成一条窄边，只留展开按钮，正文变宽 */
+	:global(html[data-toc='collapsed']) .sidebar {
+		width: 28px;
+		overflow: visible;
+	}
+	:global(html[data-toc='collapsed']) .sidebar-title {
+		justify-content: center;
+	}
+	:global(html[data-toc='collapsed']) .sidebar-title-text,
+	:global(html[data-toc='collapsed']) .sidebar-body {
+		display: none;
+	}
+
+	/* ===== 本文章节目录 ===== */
+	.sidebar-section-title {
+		font-size: 0.72em;
+		font-weight: 600;
+		color: rgb(var(--gray));
+		margin: 0 0 0.5em 0;
+		letter-spacing: 0.02em;
+	}
+	.toc-section {
+		margin-bottom: 1.4em;
+		padding-bottom: 1em;
+		border-bottom: 1px solid var(--border);
+	}
+	.chapter-nav {
+		display: flex;
+		flex-direction: column;
+	}
+	.chapter-item {
+		display: block;
+		padding: 0.28em 0.6em;
+		border-left: 2px solid var(--border);
+		font-size: 0.78em;
+		line-height: 1.45;
+		color: rgb(var(--gray));
+		text-decoration: none;
+		transition: color 0.15s, border-color 0.15s;
+	}
+	.chapter-item.depth-3 {
+		padding-left: 1.5em;
+		font-size: 0.74em;
+	}
+	.chapter-item:hover {
+		color: rgb(var(--gray-dark));
+	}
+	.chapter-item.active {
+		color: var(--accent);
+		border-left-color: var(--accent);
+		font-weight: 600;
+	}
+	:global(html[data-toc='collapsed']) .toc-toggle-icon {
+		transform: rotate(180deg);
+	}
 	.sidebar-nav {
 		display: flex;
 		flex-direction: column;
@@ -227,6 +425,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		color: rgb(var(--black));
 		border-bottom: 1px solid var(--border);
 		padding-bottom: 0.3em;
+	}
+	.content :global(h2),
+	.content :global(h3) {
+		scroll-margin-top: 1em;
 	}
 	.content :global(h3) {
 		font-size: 1.1em;
@@ -396,6 +598,26 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		}
 		.title {
 			font-size: 1.4em;
+		}
+		/* 窄屏侧栏在正文上方，章节目录竖排太长，只保留横向的文章列表 */
+		.toc-section {
+			display: none;
+		}
+		/* 窄屏侧栏在正文上方，折叠时只收起列表 */
+		:global(html[data-toc='collapsed']) .sidebar {
+			width: 100%;
+		}
+		:global(html[data-toc='collapsed']) .sidebar-title {
+			justify-content: space-between;
+		}
+		:global(html[data-toc='collapsed']) .sidebar-title-text {
+			display: block;
+		}
+		.toc-toggle-icon {
+			transform: rotate(-90deg);
+		}
+		:global(html[data-toc='collapsed']) .toc-toggle-icon {
+			transform: rotate(90deg);
 		}
 	}
 </style>
