@@ -1,0 +1,157 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { EMAIL } from '../../consts';
+const title = '标签页管家 隐私政策 / Tab Hub Privacy Policy';
+const description = '标签页管家（Tab Hub）Chrome 插件的隐私政策：完全本地运行，不收集、不存储、不传输任何用户数据。';
+const updated = '2026-10-24';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+	<body>
+		<Header />
+		<div class="page">
+			<main>
+				<article class="prose">
+					<div class="meta">
+						更新日期 / Last updated：<time datetime={updated}>{updated}</time>
+					</div>
+					<h1>标签页管家 隐私政策</h1>
+
+					<p class="lead">
+						标签页管家（以下简称“本插件”）是一个在浏览器本地运行的标签页管理工具。
+						本插件<strong>不收集、不存储、不传输任何用户数据</strong>。
+					</p>
+
+					<h2>本插件访问哪些信息</h2>
+					<p>为了实现标签页管理功能，本插件会在你的浏览器本地读取以下信息：</p>
+					<ul>
+						<li>已打开标签页的标题、网址、网站图标和所在窗口，用于分组显示、搜索和跳转</li>
+						<li>最近关闭的标签页记录，仅在你点击“撤销”时用于恢复刚刚关闭的标签页</li>
+					</ul>
+					<p>
+						这些信息只在你的浏览器内存中使用，<strong>不会被保存到任何服务器，也不会发送给任何第三方</strong>。本插件不读取网页内容。
+					</p>
+
+					<h2>本地存储</h2>
+					<p>本插件只在浏览器本地保存界面偏好（例如哪些网站分组处于折叠状态），不包含任何个人信息。卸载本插件后，这些数据会被浏览器一并删除。</p>
+
+					<h2>网络请求</h2>
+					<p>本插件不发起任何网络请求，没有统计分析、广告或第三方代码。</p>
+
+					<h2>权限说明</h2>
+					<ul>
+						<li><code>tabs</code>：读取标签页的标题和网址，用于分组、搜索、跳转和关闭</li>
+						<li><code>tabGroups</code>：把选中的标签页归为 Chrome 标签组</li>
+						<li><code>sessions</code>：撤销关闭，恢复刚刚关闭的标签页</li>
+						<li><code>sidePanel</code>：在浏览器侧边栏中显示本插件界面</li>
+					</ul>
+
+					<h2>联系方式</h2>
+					<p>如对本隐私政策有疑问，请发送邮件至：<a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
+
+					<hr />
+
+					<h1 lang="en">Tab Hub Privacy Policy</h1>
+					<div lang="en">
+						<p class="lead">
+							Tab Hub is a tab management tool that runs entirely in your browser.
+							It <strong>does not collect, store or transmit any user data</strong>.
+						</p>
+
+						<h2>What the extension accesses</h2>
+						<ul>
+							<li>Titles, URLs, favicons and windows of your open tabs, used to group, search, jump to and close tabs</li>
+							<li>Recently closed tabs, used only when you click "Undo" to restore tabs you just closed</li>
+						</ul>
+						<p>
+							This information is used only in your browser's memory. It is <strong>never saved to a server or shared with any third party</strong>.
+							The extension does not read page content.
+						</p>
+
+						<h2>Local storage</h2>
+						<p>The extension only stores UI preferences locally (such as which site groups are collapsed). No personal information is stored, and it is removed when you uninstall the extension.</p>
+
+						<h2>Network requests</h2>
+						<p>The extension makes no network requests and contains no analytics, ads or third-party code.</p>
+
+						<h2>Permissions</h2>
+						<ul>
+							<li><code>tabs</code>: read tab titles and URLs to group, search, jump to and close tabs</li>
+							<li><code>tabGroups</code>: turn selected tabs into a Chrome tab group</li>
+							<li><code>sessions</code>: undo closing by restoring recently closed tabs</li>
+							<li><code>sidePanel</code>: show the extension in the browser side panel</li>
+						</ul>
+
+						<h2>Contact</h2>
+						<p>If you have questions about this policy, email <a href={`mailto:${EMAIL}`}>{EMAIL}</a>.</p>
+					</div>
+
+					<p class="back"><a href="/tab-hub/">← 标签页管家 / Tab Hub</a></p>
+				</article>
+			</main>
+		</div>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.prose {
+		max-width: 680px;
+		margin: auto;
+		padding: 2em 1em 4em;
+		font-size: 0.9em;
+	}
+	.meta {
+		color: rgb(var(--gray));
+		font-size: 0.9em;
+		margin-bottom: 0.5em;
+	}
+	.prose h1 {
+		font-size: 2em;
+		margin-bottom: 1em;
+		line-height: 1.3;
+		color: rgb(var(--black));
+	}
+	.prose h2 {
+		font-size: 1.3em;
+		margin: 2em 0 0.6em 0;
+		color: rgb(var(--black));
+		border-left: 3px solid var(--accent);
+		padding-left: 0.6em;
+	}
+	.prose .lead {
+		font-size: 1.1em;
+		line-height: 1.8;
+		color: rgb(var(--gray-dark));
+		padding: 1em 0;
+		border-top: 1px solid var(--border);
+		border-bottom: 1px solid var(--border);
+		margin-bottom: 1.5em;
+	}
+	.prose p,
+	.prose li {
+		line-height: 1.8;
+		color: rgb(var(--gray-dark));
+	}
+	.prose ul {
+		padding-left: 1.2em;
+		margin-bottom: 1em;
+	}
+	.prose strong {
+		color: rgb(var(--black));
+	}
+	.prose hr {
+		margin: 3em 0;
+		border: none;
+		border-top: 1px solid var(--border);
+	}
+	.prose .back {
+		margin-top: 3em;
+	}
+</style>

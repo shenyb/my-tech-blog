@@ -1,0 +1,142 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+const title = '标签页管家 Tab Hub：按网站汇总所有标签页的 Chrome 插件';
+const description = '按网站汇总所有窗口的标签页，快速搜索跳转，拖动框选批量关闭，一键清理重复标签。完全本地运行，不收集任何数据。';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+	<body>
+		<Header />
+		<div class="page">
+			<main>
+				<article class="prose">
+					<div class="product">
+						<img src="/tab-hub/icon.png" alt="标签页管家图标" width="64" height="64" />
+						<div>
+							<h1>标签页管家 <span>Tab Hub</span></h1>
+							<p class="tagline">按网站汇总所有窗口的标签页的 Chrome 插件</p>
+						</div>
+					</div>
+
+					<p class="lead">
+						开了几十个标签页，标题只剩一两个字，找一个页面要挨个点？
+						标签页管家把所有窗口的标签页按网站整理成一个能搜索、能框选的列表。
+					</p>
+
+					<img class="shot" src="/tab-hub/screenshot-zh.png" alt="标签页管家：拖动框选，批量关闭" width="1280" height="800" loading="lazy" />
+
+					<h2>功能</h2>
+					<ul>
+						<li><strong>按网站自动分组</strong>：所有窗口的标签按网站汇总，完整标题一眼看清，标注所在窗口、最近访问时间和“当前 / 已固定 / 播放中 / 重复”等状态</li>
+						<li><strong>搜索 + 回车直达</strong>：按标题或网址搜索，支持多个关键词和模糊匹配，回车跳到对应窗口的标签</li>
+						<li><strong>拖动框选，批量关闭</strong>：像在桌面上框选文件一样选标签（Mac 开启“三指拖移”后可三指滑动框选），也支持 Shift 连选、⌘/Ctrl 单选</li>
+						<li><strong>归为标签组</strong>：选中的标签一键转成 Chrome 原生标签组</li>
+						<li><strong>一键清理重复标签</strong>，关错了还能<strong>撤销</strong></li>
+						<li><strong>侧边栏常驻</strong>：切换、关闭标签都不会消失，快捷键 ⌘⇧K（Windows：Ctrl+Shift+K）随时打开</li>
+						<li><strong>中英双语</strong>，跟随浏览器语言</li>
+					</ul>
+
+					<h2>隐私</h2>
+					<p>完全在浏览器本地运行：不读取网页内容，不联网，不收集任何数据。详见<a href="/tab-hub/privacy/">隐私政策</a>。</p>
+
+					<hr />
+
+					<div lang="en">
+						<h2>Tab Hub (English)</h2>
+						<p>
+							Tab Hub puts every tab from every window into one clean list grouped by site.
+							Search and jump instantly, drag to select and close tabs in bulk, turn a selection into a tab group,
+							remove duplicates in one click and undo if you change your mind. It lives in Chrome's side panel
+							(<strong>Cmd/Ctrl+Shift+K</strong>) and runs entirely in your browser: no page content, no network requests, no data collection.
+						</p>
+						<img class="shot" src="/tab-hub/screenshot-en.png" alt="Tab Hub: drag to select, close in bulk" width="1280" height="800" loading="lazy" />
+						<p><a href="/tab-hub/privacy/">Privacy Policy</a></p>
+					</div>
+				</article>
+			</main>
+		</div>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.prose {
+		max-width: 760px;
+		margin: auto;
+		padding: 2em 1em 4em;
+		font-size: 0.9em;
+	}
+	.product {
+		display: flex;
+		align-items: center;
+		gap: 1em;
+		margin-bottom: 1.5em;
+	}
+	.product img {
+		flex: none;
+		border-radius: 14px;
+	}
+	.prose h1 {
+		margin: 0;
+		font-size: 2em;
+		line-height: 1.3;
+		color: rgb(var(--black));
+	}
+	.prose h1 span {
+		color: rgb(var(--gray));
+		font-weight: 400;
+	}
+	.tagline {
+		margin: 0.2em 0 0;
+		color: rgb(var(--gray));
+	}
+	.prose h2 {
+		font-size: 1.3em;
+		margin: 2em 0 0.6em 0;
+		color: rgb(var(--black));
+		border-left: 3px solid var(--accent);
+		padding-left: 0.6em;
+	}
+	.prose .lead {
+		font-size: 1.1em;
+		line-height: 1.8;
+		color: rgb(var(--gray-dark));
+		padding: 1em 0;
+		border-top: 1px solid var(--border);
+		border-bottom: 1px solid var(--border);
+		margin-bottom: 1.5em;
+	}
+	.prose p,
+	.prose li {
+		line-height: 1.8;
+		color: rgb(var(--gray-dark));
+	}
+	.prose ul {
+		padding-left: 1.2em;
+	}
+	.prose li {
+		margin-bottom: 0.5em;
+	}
+	.prose strong {
+		color: rgb(var(--black));
+	}
+	.shot {
+		display: block;
+		width: 100%;
+		height: auto;
+		margin: 1em 0;
+		border: 1px solid var(--border);
+		border-radius: 10px;
+	}
+	.prose hr {
+		margin: 3em 0;
+		border: none;
+		border-top: 1px solid var(--border);
+	}
+</style>
