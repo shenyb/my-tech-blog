@@ -29,6 +29,12 @@ const description = '按网站汇总所有窗口的标签页，快速搜索跳�
 						标签页管家把所有窗口的标签页按网站整理成一个能搜索、能框选的列表。
 					</p>
 
+					<p class="cta">
+						<a class="cta-btn" href="https://chromewebstore.google.com/detail/%E6%A0%87%E7%AD%BE%E9%A1%B5%E7%AE%A1%E5%AE%B6/nbpkhbblgfcboimbofbeipbnoabbpfbi?hl=zh-CN" target="_blank" rel="noopener noreferrer">
+							添加到 Chrome（Chrome 应用商店） →
+						</a>
+					</p>
+
 					<img class="shot" src="/tab-hub/screenshot-zh.png" alt="标签页管家：拖动框选，批量关闭" width="1280" height="800" loading="lazy" />
 
 					<h2>功能</h2>
@@ -56,7 +62,11 @@ const description = '按网站汇总所有窗口的标签页，快速搜索跳�
 							(<strong>Cmd/Ctrl+Shift+K</strong>) and runs entirely in your browser: no page content, no network requests, no data collection.
 						</p>
 						<img class="shot" src="/tab-hub/screenshot-en.png" alt="Tab Hub: drag to select, close in bulk" width="1280" height="800" loading="lazy" />
-						<p><a href="/tab-hub/privacy/">Privacy Policy</a></p>
+						<p>
+							<a href="https://chromewebstore.google.com/detail/nbpkhbblgfcboimbofbeipbnoabbpfbi?hl=en" target="_blank" rel="noopener noreferrer">Add to Chrome (Chrome Web Store)</a>
+							·
+							<a href="/tab-hub/privacy/">Privacy Policy</a>
+						</p>
 					</div>
 				</article>
 			</main>
@@ -111,6 +121,22 @@ const description = '按网站汇总所有窗口的标签页，快速搜索跳�
 		border-top: 1px solid var(--border);
 		border-bottom: 1px solid var(--border);
 		margin-bottom: 1.5em;
+	}
+	.cta {
+		margin: 0 0 1.5em 0;
+	}
+	.cta-btn {
+		display: inline-block;
+		padding: 0.6em 1.2em;
+		background: var(--accent);
+		color: #ffffff;
+		font-weight: 600;
+		border-radius: 8px;
+		text-decoration: none;
+		transition: opacity 0.15s;
+	}
+	.cta-btn:hover {
+		opacity: 0.9;
 	}
 	.prose p,
 	.prose li {
