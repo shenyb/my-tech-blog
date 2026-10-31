@@ -825,6 +825,7 @@
 
     function copyCheckId() {
       if (!currentCheckId) return;
+      gcEvent('pdf-copy-check-id');
       navigator.clipboard.writeText(currentCheckId).then(() => {
         alert('检查编号已复制到剪贴板：' + currentCheckId);
       }).catch(() => {
@@ -1045,7 +1046,17 @@
     }
 
     // 核心分析主流程
+    // GoatCounter 自定义事件：只记录事件名，不上传文件名和内容
+    function gcEvent(name) {
+      try {
+        if (window.goatcounter && window.goatcounter.count) {
+          window.goatcounter.count({ path: name, title: name, event: true });
+        }
+      } catch (e) { /* 统计失败不影响检测 */ }
+    }
+
     async function analyzePdfBytes(bytes, fileName, isDemo) {
+      gcEvent(isDemo ? 'pdf-check-demo' : 'pdf-check-real');
       const raw = latin1Decoder.decode(bytes);
       let riskScore = 0;
 
@@ -1488,5 +1499,7 @@
       await analyzePdfBytes(bytes, fileName, true);
     }
   </script>
+  <script data-goatcounter="https://shenyanbin.goatcounter.com/count"
+          async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>
