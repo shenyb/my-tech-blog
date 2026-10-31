@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <filter id="shadow2" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <rect width="960" height="540" fill="url(#bg2)" />
+
+  <text x="480" y="44" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="22" font-weight="800" fill="#f8fafc" text-anchor="middle">
+    PDF 底层二进制增量保存（ISO 32000-1）结构解剖
+  </text>
+  <text x="480" y="70" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="13" fill="#94a3b8" text-anchor="middle">
+    为什么用办公软件二次保存会留下不可磨灭的版本链痕迹？
+  </text>
+
+  <!-- Top: Normal Stream Generation -->
+  <g transform="translate(60, 100)" filter="url(#shadow2)">
+    <rect width="840" height="150" rx="12" fill="#1e293b" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.6" />
+    <text x="24" y="32" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="15" font-weight="700" fill="#34d399">
+      🟢 银行正规导出：单次流式生成 (1 个 %%EOF)
+    </text>
+    <text x="816" y="32" font-family="monospace" font-size="12" fill="#94a3b8" text-anchor="end">Producer: CMB Batch Engine v4.2</text>
+
+    <!-- Blocks -->
+    <g transform="translate(24, 52)">
+      <rect x="0" y="0" width="120" height="48" rx="6" fill="#0f172a" stroke="#334155" />
+      <text x="60" y="28" font-family="monospace" font-size="12" fill="#93c5fd" text-anchor="middle">%PDF-1.4 头部</text>
+
+      <rect x="135" y="0" width="280" height="48" rx="6" fill="#0f172a" stroke="#334155" />
+      <text x="275" y="28" font-family="monospace" font-size="12" fill="#cbd5e1" text-anchor="middle">正文对象 (Catalog / Pages / Stream)</text>
+
+      <rect x="430" y="0" width="130" height="48" rx="6" fill="#0f172a" stroke="#334155" />
+      <text x="495" y="28" font-family="monospace" font-size="12" fill="#cbd5e1" text-anchor="middle">xref 交叉引用表</text>
+
+      <rect x="575" y="0" width="100" height="48" rx="6" fill="#0f172a" stroke="#334155" />
+      <text x="625" y="28" font-family="monospace" font-size="12" fill="#cbd5e1" text-anchor="middle">trailer 字典</text>
+
+      <rect x="690" y="0" width="100" height="48" rx="6" fill="#10b981" fill-opacity="0.25" stroke="#10b981" stroke-width="1.5" />
+      <text x="740" y="28" font-family="monospace" font-size="13" font-weight="700" fill="#34d399" text-anchor="middle">%%EOF</text>
+    </g>
+    <text x="24" y="128" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="12" fill="#94a3b8">
+      结构规范干净，整个文件只有 1 个文件结束标记，各对象均为一次性序列化生成。
+    </text>
+  </g>
+
+  <!-- Bottom: Incremental Update (Tampered) -->
+  <g transform="translate(60, 275)" filter="url(#shadow2)">
+    <rect width="840" height="225" rx="12" fill="#1e293b" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.7" />
+    <text x="24" y="32" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="15" font-weight="700" fill="#f87171">
+      🚨 篡改重存流水：底层增量追加覆盖 (2 个 %%EOF 与多版本链)
+    </text>
+    <text x="816" y="32" font-family="monospace" font-size="12" fill="#fca5a5" text-anchor="end">Producer: WPS Office / Acrobat Pro</text>
+
+    <!-- Version 1 Part -->
+    <g transform="translate(24, 52)">
+      <rect x="0" y="0" width="410" height="60" rx="8" fill="#0f172a" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 2" />
+      <text x="205" y="25" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="12" font-weight="700" fill="#60a5fa" text-anchor="middle">
+        【版本 #1】完整原始 PDF 数据（未被物理删除！）
+      </text>
+      <text x="205" y="45" font-family="monospace" font-size="11" fill="#94a3b8" text-anchor="middle">
+        含原始工资 8,500.00 流水记录 ... → %%EOF #1
+      </text>
+    </g>
+
+    <!-- Arrow -->
+    <text x="448" y="90" font-family="monospace" font-size="20" font-weight="700" fill="#ef4444" text-anchor="middle">➕</text>
+
+    <!-- Version 2 Part (Appended) -->
+    <g transform="translate(465, 52)">
+      <rect x="0" y="0" width="350" height="60" rx="8" fill="#ef4444" fill-opacity="0.15" stroke="#ef4444" stroke-width="1.5" />
+      <text x="175" y="25" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="12" font-weight="700" fill="#f87171" text-anchor="middle">
+        【版本 #2】WPS 追加修改段
+      </text>
+      <text x="175" y="45" font-family="monospace" font-size="11" fill="#fca5a5" text-anchor="middle">
+        覆盖对象(28,500) + xref2 + trailer(Prev) → %%EOF #2
+      </text>
+    </g>
+
+    <!-- Highlight Box -->
+    <rect x="24" y="128" width="792" height="75" rx="8" fill="#ef4444" fill-opacity="0.1" stroke="#ef4444" stroke-opacity="0.3" />
+    <text x="40" y="152" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="12.5" font-weight="700" fill="#fca5a5">
+      🔍 底层取证原理与原值剥离：
+    </text>
+    <text x="40" y="172" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="12" fill="#cbd5e1">
+      1. 凡检测到 %%EOF 数量 &gt; 1，铁证证明文件脱离银行后经过第三方编辑软件二次修改保存。
+    </text>
+    <text x="40" y="192" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="12" fill="#cbd5e1">
+      2. 截取至 %%EOF #1 结束偏移的字节流，即可 100% 提取并下载篡改前的原始版本，直接比对涂改原值！
+    </text>
+  </g>
+</svg>

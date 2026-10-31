@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <filter id="shadow3" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="8" stdDeviation="14" flood-color="#000" flood-opacity="0.4" />
+    </filter>
+  </defs>
+
+  <rect width="960" height="560" fill="url(#bg3)" />
+
+  <text x="480" y="44" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="22" font-weight="800" fill="#f8fafc" text-anchor="middle">
+    PDF 篡改检测系统 · 实际检测报告效果预览
+  </text>
+  <text x="480" y="70" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="13" fill="#94a3b8" text-anchor="middle">
+    100% 本地离线解析 · 隐私不出本机 · 检查编号一单一人工核验闭环
+  </text>
+
+  <!-- Report Card Container -->
+  <g transform="translate(60, 95)" filter="url(#shadow3)">
+    <rect width="840" height="430" rx="14" fill="#1e293b" stroke="#334155" stroke-width="1.5" />
+
+    <!-- Check ID Bar -->
+    <g transform="translate(20, 20)">
+      <rect width="800" height="42" rx="8" fill="#0f172a" stroke="#334155" />
+      <text x="16" y="26" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="13" fill="#94a3b8">本次检查编号：</text>
+      <text x="120" y="27" font-family="monospace" font-size="15" font-weight="700" fill="#38bdf8">PD-20261031-FNYW</text>
+      <rect x="290" y="10" width="85" height="24" rx="5" fill="#334155" />
+      <text x="332" y="26" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="11.5" fill="#f8fafc" text-anchor="middle">📋 复制编号</text>
+      <text x="784" y="26" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="12" fill="#94a3b8" text-anchor="end">人工深度核对凭据</text>
+    </g>
+
+    <!-- Verdict Banner (High Risk) -->
+    <g transform="translate(20, 75)">
+      <rect width="800" height="78" rx="10" fill="#ef4444" fill-opacity="0.14" stroke="#ef4444" stroke-opacity="0.4" stroke-width="1.5" />
+      <text x="24" y="34" font-size="28">🚨</text>
+      <text x="68" y="32" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="16" font-weight="800" fill="#f87171">
+        检测到高风险信号，建议结合官方渠道复核
+      </text>
+      <text x="68" y="55" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="12.5" fill="#94a3b8">
+        文件：测试用户_薪资流水_合成异常样本.pdf（2.4 KB）— 底层结构与账目逻辑共检测到 5 处异常信号。
+      </text>
+      <!-- Score -->
+      <text x="770" y="44" font-family="monospace" font-size="34" font-weight="800" fill="#f87171" text-anchor="end">100</text>
+      <text x="770" y="62" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="11" fill="#94a3b8" text-anchor="end">篡改风险指数</text>
+    </g>
+
+    <!-- Category Findings (4 items) -->
+    <g transform="translate(20, 168)">
+      <!-- Item 1 -->
+      <g transform="translate(0, 0)">
+        <rect width="800" height="48" rx="6" fill="#0f172a" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5" />
+        <rect x="0" y="0" width="4" height="48" rx="2" fill="#ef4444" />
+        <text x="16" y="20" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="13" font-weight="700" fill="#f8fafc">增量保存与版本标记</text>
+        <rect x="700" y="12" width="85" height="22" rx="4" fill="#ef4444" fill-opacity="0.2" />
+        <text x="742" y="27" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="11" font-weight="700" fill="#fca5a5" text-anchor="middle">高风险 (1项)</text>
+        <text x="16" y="38" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="11.5" fill="#cbd5e1">
+          检测到 2 个保存版本（存在追加修改表，且首末版本文本内容存在改动覆盖）。
+        </text>
+      </g>
+
+      <!-- Item 2 -->
+      <g transform="translate(0, 56)">
+        <rect width="800" height="48" rx="6" fill="#0f172a" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5" />
+        <rect x="0" y="0" width="4" height="48" rx="2" fill="#ef4444" />
+        <text x="16" y="20" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="13" font-weight="700" fill="#f8fafc">生成器指纹与元数据</text>
+        <rect x="700" y="12" width="85" height="22" rx="4" fill="#ef4444" fill-opacity="0.2" />
+        <text x="742" y="27" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="11" font-weight="700" fill="#fca5a5" text-anchor="middle">高风险 (2项)</text>
+        <text x="16" y="38" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="11.5" fill="#cbd5e1">
+          命中第三方修改工具指纹（WPS Office、Adobe Acrobat），修改时间与创建时间冲突。
+        </text>
+      </g>
+
+      <!-- Item 3 -->
+      <g transform="translate(0, 112)">
+        <rect width="800" height="48" rx="6" fill="#0f172a" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5" />
+        <rect x="0" y="0" width="4" height="48" rx="2" fill="#ef4444" />
+        <text x="16" y="20" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="13" font-weight="700" fill="#f8fafc">字体排版与字形特征</text>
+        <rect x="700" y="12" width="85" height="22" rx="4" fill="#ef4444" fill-opacity="0.2" />
+        <text x="742" y="27" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="11" font-weight="700" fill="#fca5a5" text-anchor="middle">高风险 (1项)</text>
+        <text x="16" y="38" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="11.5" fill="#cbd5e1">
+          检测到文字排版微距异常（发现 1 处同水平基线混用不同字体字典）。
+        </text>
+      </g>
+
+      <!-- Item 4 -->
+      <g transform="translate(0, 168)">
+        <rect width="800" height="48" rx="6" fill="#0f172a" stroke="#ef4444" stroke-width="1" stroke-opacity="0.5" />
+        <rect x="0" y="0" width="4" height="48" rx="2" fill="#ef4444" />
+        <text x="16" y="20" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="13" font-weight="700" fill="#f8fafc">账目数据连续勾稽</text>
+        <rect x="670" y="12" width="115" height="22" rx="4" fill="#ef4444" fill-opacity="0.2" />
+        <text x="727" y="27" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="11" font-weight="700" fill="#fca5a5" text-anchor="middle">高风险 (1处断裂)</text>
+        <text x="16" y="38" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="11.5" fill="#cbd5e1">
+          发现 1 处余额加减勾稽关系断裂（上一笔余额与本笔发生额相加不等于本笔期末余额）。
+        </text>
+      </g>
+    </g>
+
+    <!-- Bottom Footer -->
+    <text x="420" y="405" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif" font-size="12" fill="#64748b" text-anchor="middle">
+      本工具只给篡改风险信号，不做官方真伪背书 · 访问地址：ganhuo.dev/pdf-forensics/
+    </text>
+  </g>
+</svg>
