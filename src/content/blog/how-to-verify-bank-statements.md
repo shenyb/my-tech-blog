@@ -2,10 +2,12 @@
 title: '银行流水怎么辨别真假：别看印章红不红，看这三个底层死穴'
 description: '从算术余额链、增量保存版本痕迹到字体生成器指纹，详解现代 PDF 电子凭证与银行流水的防伪核验技术。'
 pubDate: 2026-10-31
-heroImage: '/pdf-forensics/images/hero-cover.jpg'
+heroImage: ''
 category: engineering
 tags: ['PDF取证', '风控', '安全', '工程实践']
 ---
+
+![银行流水真伪核验封面图](/pdf-forensics/images/hero-cover.jpg)
 
 在 HR 背景调查、金融风控审核或商业合作中，PDF 格式的银行流水与薪资证明是最常见的财力凭证。
 
