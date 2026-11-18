@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" width="960" height="500" font-family="'PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <defs>
+    <marker id="arR" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#cf222e"/></marker>
+    <marker id="arG" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1a7f37"/></marker>
+  </defs>
+  <rect width="960" height="500" fill="#ffffff"/>
+  <text x="480" y="36" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2328">LIMIT 100000, 10：直接查 vs 延迟关联，贵在哪一步</text>
+
+  <!-- Left -->
+  <rect x="30" y="60" width="430" height="350" rx="10" fill="#fff8f8" stroke="#cf222e" stroke-width="1.5"/>
+  <text x="245" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#cf222e">直接查：SELECT * … LIMIT 100000, 10</text>
+
+  <rect x="60" y="110" width="370" height="58" rx="8" fill="#ffffff" stroke="#cf222e"/>
+  <text x="245" y="134" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2328">① 按二级索引顺序取出 100010 个 id</text>
+  <text x="245" y="155" text-anchor="middle" font-size="12" fill="#57606a">索引里没有 SELECT * 要的字段</text>
+  <line x1="245" y1="168" x2="245" y2="196" stroke="#cf222e" stroke-width="2" marker-end="url(#arR)"/>
+
+  <rect x="60" y="200" width="370" height="58" rx="8" fill="#ffebe9" stroke="#cf222e"/>
+  <text x="245" y="224" text-anchor="middle" font-size="13" font-weight="700" fill="#cf222e">② 每个 id 回聚簇索引读整行，100010 次</text>
+  <text x="245" y="245" text-anchor="middle" font-size="12" fill="#57606a">随机 IO，且整行都被拉进 Buffer Pool</text>
+  <line x1="245" y1="258" x2="245" y2="286" stroke="#cf222e" stroke-width="2" marker-end="url(#arR)"/>
+
+  <rect x="60" y="290" width="370" height="58" rx="8" fill="#ffffff" stroke="#cf222e"/>
+  <text x="245" y="314" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2328">③ 丢掉前 100000 行，返回 10 行</text>
+  <text x="245" y="335" text-anchor="middle" font-size="12" fill="#57606a">99.99% 的回表白做了</text>
+  <text x="245" y="385" text-anchor="middle" font-size="13" font-weight="700" fill="#cf222e">优化器算出回表太贵 → 干脆全表扫 + filesort</text>
+
+  <!-- Right -->
+  <rect x="500" y="60" width="430" height="350" rx="10" fill="#f6fff8" stroke="#1a7f37" stroke-width="1.5"/>
+  <text x="715" y="90" text-anchor="middle" font-size="15" font-weight="700" fill="#1a7f37">延迟关联：先在索引里挑 id，再回表</text>
+
+  <rect x="530" y="110" width="370" height="58" rx="8" fill="#ffffff" stroke="#1a7f37"/>
+  <text x="715" y="134" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2328">① 子查询 SELECT id 只碰覆盖索引</text>
+  <text x="715" y="155" text-anchor="middle" font-size="12" fill="#57606a">顺序读叶子链表，在索引项上直接判断 WHERE</text>
+  <line x1="715" y1="168" x2="715" y2="196" stroke="#1a7f37" stroke-width="2" marker-end="url(#arG)"/>
+
+  <rect x="530" y="200" width="370" height="58" rx="8" fill="#dafbe1" stroke="#1a7f37"/>
+  <text x="715" y="224" text-anchor="middle" font-size="13" font-weight="700" fill="#1a7f37">② 跳过 100000 个索引项，只留 10 个 id</text>
+  <text x="715" y="245" text-anchor="middle" font-size="12" fill="#57606a">跳过的仍是 offset 个，但每个只是一次内存比较</text>
+  <line x1="715" y1="258" x2="715" y2="286" stroke="#1a7f37" stroke-width="2" marker-end="url(#arG)"/>
+
+  <rect x="530" y="290" width="370" height="58" rx="8" fill="#ffffff" stroke="#1a7f37"/>
+  <text x="715" y="314" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2328">③ 外层 JOIN 主键，回表 10 次</text>
+  <text x="715" y="335" text-anchor="middle" font-size="12" fill="#57606a">eq_ref PRIMARY，10 次点查</text>
+  <text x="715" y="385" text-anchor="middle" font-size="13" font-weight="700" fill="#1a7f37">子查询：Using where; Using index，无 filesort</text>
+
+  <rect x="30" y="428" width="900" height="56" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="480" y="452" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1f2328">延迟关联省掉的是「offset 次随机回表」，没有省掉「offset 次索引项扫描」</text>
+  <text x="480" y="473" text-anchor="middle" font-size="12.5" fill="#57606a">所以深分页依然随 offset 线性变慢，只是斜率小了很多；要让尾页也快，还得把 offset 变小（见下一步）</text>
+</svg>

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" width="960" height="560" font-family="'PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="960" height="560" fill="#ffffff"/>
+  <text x="480" y="36" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2328">同样 9 个列，主键 id 放在哪，决定了叶子节点的排序</text>
+  <text x="480" y="60" text-anchor="middle" font-size="12.5" fill="#57606a">查询：WHERE annual_rate &gt;= 18 ORDER BY lend_time DESC, id DESC LIMIT 1000, 10</text>
+
+  <!-- Panel A -->
+  <rect x="30" y="80" width="900" height="210" rx="10" fill="#fff8f8" stroke="#cf222e" stroke-width="1.5"/>
+  <text x="50" y="108" font-size="15" font-weight="700" fill="#cf222e">索引 A：(lend_time, loan_status, annual_rate, …)　＋ InnoDB 自动追加在末尾的主键 id</text>
+
+  <rect x="50" y="122" width="560" height="30" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="70" y="142" font-size="12.5" font-weight="700" fill="#57606a">lend_time</text>
+  <text x="230" y="142" font-size="12.5" font-weight="700" fill="#57606a">loan_status</text>
+  <text x="370" y="142" font-size="12.5" font-weight="700" fill="#57606a">annual_rate</text>
+  <text x="500" y="142" font-size="12.5" font-weight="700" fill="#57606a">id（隐式）</text>
+
+  <rect x="50" y="152" width="560" height="30" fill="#ffffff" stroke="#d0d7de"/>
+  <text x="70" y="172" font-size="12.5" fill="#1f2328">2025-06-01 10:00</text>
+  <text x="230" y="172" font-size="12.5" fill="#1f2328">在贷</text>
+  <text x="370" y="172" font-size="12.5" fill="#1f2328">18%</text>
+  <text x="500" y="172" font-size="12.5" font-weight="700" fill="#cf222e">105</text>
+
+  <rect x="50" y="182" width="560" height="30" fill="#ffffff" stroke="#d0d7de"/>
+  <text x="70" y="202" font-size="12.5" fill="#1f2328">2025-06-01 10:00</text>
+  <text x="230" y="202" font-size="12.5" fill="#1f2328">逾期</text>
+  <text x="370" y="202" font-size="12.5" fill="#1f2328">24%</text>
+  <text x="500" y="202" font-size="12.5" font-weight="700" fill="#cf222e">101</text>
+
+  <rect x="50" y="212" width="560" height="30" fill="#ffffff" stroke="#d0d7de"/>
+  <text x="70" y="232" font-size="12.5" fill="#1f2328">2025-06-01 10:00</text>
+  <text x="230" y="232" font-size="12.5" fill="#1f2328">逾期</text>
+  <text x="370" y="232" font-size="12.5" fill="#1f2328">36%</text>
+  <text x="500" y="232" font-size="12.5" font-weight="700" fill="#cf222e">109</text>
+
+  <text x="630" y="150" font-size="13" font-weight="700" fill="#cf222e">同一时刻内按 loan_status 排</text>
+  <text x="630" y="172" font-size="12.5" fill="#1f2328">→ id 是 105、101、109，乱序</text>
+  <text x="630" y="194" font-size="12.5" fill="#1f2328">→ 和 ORDER BY lend_time, id 对不上</text>
+  <text x="630" y="216" font-size="12.5" fill="#1f2328">→ 必须把结果拿出来再排一次</text>
+  <rect x="630" y="230" width="210" height="28" rx="6" fill="#ffebe9" stroke="#cf222e"/>
+  <text x="735" y="249" text-anchor="middle" font-size="12.5" font-weight="700" fill="#cf222e">Extra：Using filesort</text>
+  <text x="50" y="274" font-size="12" fill="#57606a">filesort 要先拿到全部候选行才能排序，LIMIT 无法提前结束，翻得越深越慢。</text>
+
+  <!-- Panel B -->
+  <rect x="30" y="310" width="900" height="230" rx="10" fill="#f6fff8" stroke="#1a7f37" stroke-width="1.5"/>
+  <text x="50" y="338" font-size="15" font-weight="700" fill="#1a7f37">索引 B：(lend_time, id, loan_status, annual_rate, …)　主键 id 显式放在第 2 列</text>
+
+  <rect x="50" y="352" width="560" height="30" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="70" y="372" font-size="12.5" font-weight="700" fill="#57606a">lend_time</text>
+  <text x="230" y="372" font-size="12.5" font-weight="700" fill="#57606a">id</text>
+  <text x="370" y="372" font-size="12.5" font-weight="700" fill="#57606a">loan_status</text>
+  <text x="500" y="372" font-size="12.5" font-weight="700" fill="#57606a">annual_rate</text>
+
+  <rect x="50" y="382" width="560" height="30" fill="#ffffff" stroke="#d0d7de"/>
+  <text x="70" y="402" font-size="12.5" fill="#1f2328">2025-06-01 10:00</text>
+  <text x="230" y="402" font-size="12.5" font-weight="700" fill="#1a7f37">101</text>
+  <text x="370" y="402" font-size="12.5" fill="#1f2328">逾期</text>
+  <text x="500" y="402" font-size="12.5" fill="#1f2328">24%</text>
+
+  <rect x="50" y="412" width="560" height="30" fill="#ffffff" stroke="#d0d7de"/>
+  <text x="70" y="432" font-size="12.5" fill="#1f2328">2025-06-01 10:00</text>
+  <text x="230" y="432" font-size="12.5" font-weight="700" fill="#1a7f37">105</text>
+  <text x="370" y="432" font-size="12.5" fill="#1f2328">在贷</text>
+  <text x="500" y="432" font-size="12.5" fill="#1f2328">18%</text>
+
+  <rect x="50" y="442" width="560" height="30" fill="#ffffff" stroke="#d0d7de"/>
+  <text x="70" y="462" font-size="12.5" fill="#1f2328">2025-06-01 10:00</text>
+  <text x="230" y="462" font-size="12.5" font-weight="700" fill="#1a7f37">109</text>
+  <text x="370" y="462" font-size="12.5" fill="#1f2328">逾期</text>
+  <text x="500" y="462" font-size="12.5" fill="#1f2328">36%</text>
+
+  <text x="630" y="380" font-size="13" font-weight="700" fill="#1a7f37">叶子顺序 = ORDER BY 顺序</text>
+  <text x="630" y="402" font-size="12.5" fill="#1f2328">→ 倒着读叶子链表就是结果顺序</text>
+  <text x="630" y="424" font-size="12.5" fill="#1f2328">→ 凑够 offset + 10 条即可停止</text>
+  <text x="630" y="446" font-size="12.5" fill="#1f2328">→ 过滤列都在索引里，不用回表</text>
+  <rect x="630" y="460" width="270" height="28" rx="6" fill="#dafbe1" stroke="#1a7f37"/>
+  <text x="765" y="479" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1a7f37">Extra：Using where; Using index</text>
+  <text x="50" y="500" font-size="12" fill="#57606a">InnoDB 发现主键列已在索引定义里，就不会在末尾再追加一份：调整顺序不增加存储。</text>
+  <text x="50" y="522" font-size="12" fill="#57606a">注意：跳过了 lend_time 条件时，这仍然是从头扫索引（type=index），只是每一步都很便宜。</text>
+</svg>
