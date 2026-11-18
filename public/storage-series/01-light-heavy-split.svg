@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" width="960" height="500" style="background:#ffffff;font-family:'PingFang SC','Microsoft YaHei',system-ui,-apple-system,sans-serif;">
+  <defs>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#cf222e"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#0969da"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#1a7f37"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="480" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2328">轻重分离：把 TB 级大报文剥离出关系型数据库</text>
+  <text x="480" y="56" text-anchor="middle" font-size="12.5" fill="#57606a">每笔 300B 账务字段与 50KB 决策 JSON 混放会直接冲垮 InnoDB Buffer Pool，必须按「查询频次与体积」拆层</text>
+
+  <!-- LEFT PANEL: Anti-pattern -->
+  <rect x="24" y="76" width="430" height="400" rx="12" fill="#fff8f8" stroke="#f0b8bd" stroke-width="1.5"/>
+  <rect x="24" y="76" width="430" height="38" rx="12" fill="#ffebe9" stroke="#f0b8bd" stroke-width="1.5"/>
+  <text x="239" y="100" text-anchor="middle" font-size="14.5" font-weight="700" fill="#cf222e">反面设计：所有字段全塞进一张 MySQL 大宽表</text>
+
+  <!-- Single big table box -->
+  <rect x="46" y="132" width="386" height="122" rx="8" fill="#ffffff" stroke="#d0d7de" stroke-width="1.2"/>
+  <text x="239" y="154" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1f2328">单张台账宽表（2 年千万级 ≈ 2TB+）</text>
+
+  <rect x="62" y="168" width="136" height="68" rx="6" fill="#ddf4ff" stroke="#54aeff" stroke-width="1"/>
+  <text x="130" y="191" text-anchor="middle" font-size="12.5" font-weight="600" fill="#0969da">结构化标量字段</text>
+  <text x="130" y="210" text-anchor="middle" font-size="11" fill="#24292f">单号/状态/金额/时间</text>
+  <text x="130" y="226" text-anchor="middle" font-size="11" font-weight="700" fill="#0969da">仅占 ~300 字节/行</text>
+
+  <text x="211" y="206" text-anchor="middle" font-size="16" font-weight="700" fill="#57606a">+</text>
+
+  <rect x="224" y="168" width="192" height="68" rx="6" fill="#ffebe9" stroke="#ff8182" stroke-width="1"/>
+  <text x="320" y="191" text-anchor="middle" font-size="12.5" font-weight="600" fill="#cf222e">风控决策出入参 JSON</text>
+  <text x="320" y="210" text-anchor="middle" font-size="11" fill="#24292f">几千个特征变量键值对</text>
+  <text x="320" y="226" text-anchor="middle" font-size="11" font-weight="700" fill="#cf222e">占 20~60KB/行（体积占 99%）</text>
+
+  <line x1="239" y1="254" x2="239" y2="284" stroke="#cf222e" stroke-width="1.8" marker-end="url(#arrow-red)"/>
+
+  <!-- Consequence 1 -->
+  <rect x="46" y="290" width="386" height="52" rx="8" fill="#ffffff" stroke="#ff8182" stroke-width="1.2"/>
+  <text x="62" y="312" font-size="12.5" font-weight="700" fill="#cf222e">1. Buffer Pool 被大字段瞬间冲垮</text>
+  <text x="62" y="331" font-size="11.5" fill="#57606a">16KB 数据页被大行/溢出页占满，热点索引与活跃数据频繁被踢出内存</text>
+
+  <line x1="239" y1="342" x2="239" y2="364" stroke="#cf222e" stroke-width="1.8" marker-end="url(#arrow-red)"/>
+
+  <!-- Consequence 2 -->
+  <rect x="46" y="370" width="386" height="86" rx="8" fill="#ffffff" stroke="#ff8182" stroke-width="1.2"/>
+  <text x="62" y="393" font-size="12.5" font-weight="700" fill="#cf222e">2. 列表扫描 = 海量随机磁盘 IO + 分页雪崩</text>
+  <text x="62" y="413" font-size="11.5" fill="#57606a">平时翻页根本不看决策报文，但非覆盖查询回表时被迫把 2TB 数据</text>
+  <text x="62" y="431" font-size="11.5" fill="#57606a">反复从磁盘换入内存；且分表或加索引（DDL）耗时极长</text>
+
+  <!-- RIGHT PANEL: Recommended Architecture -->
+  <rect x="480" y="76" width="456" height="400" rx="12" fill="#f6ffed" stroke="#82e0aa" stroke-width="1.5"/>
+  <rect x="480" y="76" width="456" height="38" rx="12" fill="#dafbe1" stroke="#82e0aa" stroke-width="1.5"/>
+  <text x="708" y="100" text-anchor="middle" font-size="14.5" font-weight="700" fill="#1a7f37">正面设计：按访问特征拆成「轻索引列表 + 重详情」</text>
+
+  <!-- Request 1: List Query -->
+  <rect x="502" y="132" width="132" height="114" rx="8" fill="#ffffff" stroke="#54aeff" stroke-width="1.2"/>
+  <text x="568" y="160" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0969da">日常 99% 请求</text>
+  <text x="568" y="182" text-anchor="middle" font-size="12" fill="#1f2328">多条件筛选列表</text>
+  <text x="568" y="201" text-anchor="middle" font-size="12" fill="#1f2328">排序分页 / 导出</text>
+  <rect x="518" y="213" width="100" height="22" rx="4" fill="#ddf4ff"/>
+  <text x="568" y="228" text-anchor="middle" font-size="11" font-weight="600" fill="#0969da">高频核心路径</text>
+
+  <line x1="634" y1="189" x2="664" y2="189" stroke="#0969da" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+  <!-- Layer 1 Box -->
+  <rect x="670" y="132" width="244" height="114" rx="8" fill="#ffffff" stroke="#0969da" stroke-width="1.5"/>
+  <rect x="670" y="132" width="244" height="28" rx="8" fill="#ddf4ff"/>
+  <text x="792" y="151" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0969da">第一层：结构化列表层 (MySQL / TiDB)</text>
+  <text x="684" y="180" font-size="11.5" fill="#1f2328">• 只存单号/状态/金额/利率/时间</text>
+  <text x="684" y="199" font-size="11.5" fill="#1f2328">• 千万行仅约 3~5 GB，索引常驻内存</text>
+  <text x="684" y="218" font-size="11.5" font-weight="600" fill="#1a7f37">• 列表查询完全不碰大报文（毫秒级）</text>
+  <text x="684" y="236" font-size="11" fill="#57606a">• 1000~3000万用单机MySQL，再大选TiDB</text>
+
+  <!-- Link between Layer 1 and Layer 2 -->
+  <path d="M 792 246 L 792 288" stroke="#1a7f37" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <rect x="698" y="256" width="188" height="22" rx="11" fill="#ffffff" stroke="#82e0aa" stroke-width="1"/>
+  <text x="792" y="271" text-anchor="middle" font-size="11" font-weight="600" fill="#1a7f37">业务单号为 Key（无需额外索引表）</text>
+
+  <!-- Request 2: Detail Click -->
+  <rect x="502" y="294" width="132" height="114" rx="8" fill="#ffffff" stroke="#82e0aa" stroke-width="1.2"/>
+  <text x="568" y="322" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1a7f37">低频按需请求</text>
+  <text x="568" y="344" text-anchor="middle" font-size="12" fill="#1f2328">点击某笔单子的</text>
+  <text x="568" y="363" text-anchor="middle" font-size="12" fill="#1f2328">「查看决策详情」</text>
+  <rect x="518" y="375" width="100" height="22" rx="4" fill="#dafbe1"/>
+  <text x="568" y="390" text-anchor="middle" font-size="11" font-weight="600" fill="#1a7f37">按主键直接点查</text>
+
+  <line x1="634" y1="351" x2="664" y2="351" stroke="#1a7f37" stroke-width="2" marker-end="url(#arrow-green)"/>
+
+  <!-- Layer 2 Box -->
+  <rect x="670" y="294" width="244" height="114" rx="8" fill="#ffffff" stroke="#1a7f37" stroke-width="1.5"/>
+  <rect x="670" y="294" width="244" height="28" rx="8" fill="#dafbe1"/>
+  <text x="792" y="313" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1a7f37">第二层：大报文详情层 (分布式 KV)</text>
+  <text x="684" y="342" font-size="11.5" fill="#1f2328">• rowKey = 申请单号，value = Gzip 报文</text>
+  <text x="684" y="361" font-size="11.5" fill="#1f2328">• 基于 LSM-Tree，加节点在线平滑扩容</text>
+  <text x="684" y="380" font-size="11.5" font-weight="600" fill="#1a7f37">• 亚毫秒（0.2ms）点查 + 支持 TTL</text>
+  <text x="684" y="398" font-size="11" fill="#57606a">• 写盘前按只展示清单裁剪，省 70%+ 体积</text>
+
+  <!-- Footer takeaway -->
+  <rect x="502" y="422" width="412" height="38" rx="6" fill="#ffffff" stroke="#82e0aa" stroke-width="1"/>
+  <text x="708" y="445" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1f2328">写入铁律：先写大报文层（限速批量），再写列表层，查到即必存在</text>
+</svg>

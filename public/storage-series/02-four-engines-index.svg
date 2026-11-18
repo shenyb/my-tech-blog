@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 620" width="960" height="620" style="background:#ffffff;font-family:'PingFang SC','Microsoft YaHei',system-ui,-apple-system,sans-serif;">
+  <defs>
+    <marker id="arrow-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#0969da"/>
+    </marker>
+    <marker id="arrow-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#8250df"/>
+    </marker>
+    <marker id="arrow-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#1a7f37"/>
+    </marker>
+    <marker id="arrow-o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#bc4c00"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="480" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2328">四种列表检索引擎的底层存储结构对比</text>
+  <text x="480" y="54" text-anchor="middle" font-size="12.5" fill="#57606a">数据结构直接决定了：能不能不带主 ID 查、能不能动态组合筛选、扛得住多大数据量与并发</text>
+
+  <!-- Quadrant 1: MySQL -->
+  <rect x="20" y="72" width="450" height="254" rx="10" fill="#f8fafd" stroke="#54aeff" stroke-width="1.5"/>
+  <rect x="20" y="72" width="450" height="34" rx="10" fill="#ddf4ff" stroke="#54aeff" stroke-width="1.5"/>
+  <text x="245" y="94" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0969da">1. 单机 MySQL（宽覆盖索引 B+ 树）</text>
+
+  <!-- B+ tree leaf nodes -->
+  <text x="38" y="128" font-size="11.5" font-weight="600" fill="#24292f">B+ 树叶子节点双向链表（按第 1 列时间 + 第 2 列主键 id 物理排好序）：</text>
+  <rect x="38" y="138" width="194" height="58" rx="6" fill="#ffffff" stroke="#0969da" stroke-width="1.2"/>
+  <text x="135" y="157" text-anchor="middle" font-size="11" font-weight="700" fill="#0969da">[time=11-18 | id=901]</text>
+  <text x="135" y="174" text-anchor="middle" font-size="11" fill="#1f2328">status=逾期 | rate=24% | amt=5w</text>
+  <text x="135" y="189" text-anchor="middle" font-size="10.5" fill="#1a7f37">→ 过滤列印在索引格子里</text>
+
+  <line x1="232" y1="167" x2="254" y2="167" stroke="#0969da" stroke-width="1.5" marker-end="url(#arrow-b)"/>
+
+  <rect x="258" y="138" width="194" height="58" rx="6" fill="#ffffff" stroke="#0969da" stroke-width="1.2"/>
+  <text x="355" y="157" text-anchor="middle" font-size="11" font-weight="700" fill="#0969da">[time=11-17 | id=900]</text>
+  <text x="355" y="174" text-anchor="middle" font-size="11" fill="#1f2328">status=在贷 | rate=18% | amt=3k</text>
+  <text x="355" y="189" text-anchor="middle" font-size="10.5" fill="#1a7f37">→ 子查询滑过 0 回表</text>
+
+  <!-- MySQL summary box -->
+  <rect x="38" y="210" width="414" height="100" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+  <text x="52" y="231" font-size="11.5" fill="#1f2328">• 机制：子查询沿索引链表滑过，当场过滤金额/利率，最后仅回表 10 条。</text>
+  <text x="52" y="251" font-size="11.5" fill="#1a7f37">• 优势：零外部组件，千万级内（低并发后台）延迟可压至 10~100ms。</text>
+  <text x="52" y="271" font-size="11.5" fill="#cf222e">• 边界：本质是一维线性扫描索引，高并发下 CPU 易打满；单表上限</text>
+  <text x="62" y="289" font-size="11.5" fill="#cf222e">约 3000~5000 万行，再大需要拆分或分布式数据库。</text>
+
+  <!-- Quadrant 2: Key-List -->
+  <rect x="490" y="72" width="450" height="254" rx="10" fill="#faf8ff" stroke="#a475f9" stroke-width="1.5"/>
+  <rect x="490" y="72" width="450" height="34" rx="10" fill="#fbefff" stroke="#a475f9" stroke-width="1.5"/>
+  <text x="715" y="94" text-anchor="middle" font-size="13.5" font-weight="700" fill="#8250df">2. 分布式 Key-List（主 Key 哈希 + 白盒 Schema）</text>
+
+  <!-- Hash routing -->
+  <rect x="508" y="124" width="96" height="44" rx="6" fill="#ffffff" stroke="#8250df" stroke-width="1.2"/>
+  <text x="556" y="143" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8250df">必传外层 Key</text>
+  <text x="556" y="160" text-anchor="middle" font-size="11" fill="#1f2328">userId=10086</text>
+
+  <line x1="604" y1="146" x2="646" y2="146" stroke="#8250df" stroke-width="1.5" marker-end="url(#arrow-p)"/>
+  <text x="625" y="138" text-anchor="middle" font-size="10" fill="#8250df">Hash</text>
+
+  <rect x="650" y="116" width="272" height="82" rx="6" fill="#ffffff" stroke="#8250df" stroke-width="1.2"/>
+  <text x="786" y="135" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8250df">分片节点本地列表（物理按默认列预排序）</text>
+  <text x="664" y="155" font-size="11" fill="#1f2328">• Item 1: {infoId=901, state=1, price=4500}</text>
+  <text x="664" y="172" font-size="11" fill="#1f2328">• Item 2: {infoId=902, state=0, price=3200}</text>
+  <text x="664" y="189" font-size="10.5" fill="#1a7f37">• 存储节点看懂 Schema，直接本地过滤 + 动态排序</text>
+
+  <rect x="508" y="210" width="414" height="100" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+  <text x="522" y="231" font-size="11.5" fill="#1f2328">• 机制：强 Schema 白盒模型，超长列表异步建二级索引并隔离快慢队列。</text>
+  <text x="522" y="251" font-size="11.5" fill="#1a7f37">• 优势：适合「我的订单 / 我的发帖」等高并发单实体下子列表检索。</text>
+  <text x="522" y="271" font-size="11.5" fill="#cf222e">• 边界：查询必须带外层主 Key！没有主 ID 的管理后台全局筛选完全</text>
+  <text x="532" y="289" font-size="11.5" fill="#cf222e">无法路由；单 Key 下数据过百万会形成单分片热点倾斜。</text>
+
+  <!-- Quadrant 3: TiDB -->
+  <rect x="20" y="344" width="450" height="256" rx="10" fill="#f6ffed" stroke="#56d364" stroke-width="1.5"/>
+  <rect x="20" y="344" width="450" height="34" rx="10" fill="#dafbe1" stroke="#56d364" stroke-width="1.5"/>
+  <text x="245" y="366" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1a7f37">3. TiDB（行数据与二级索引各自切 96MB Region）</text>
+
+  <!-- Index Region + Data Region -->
+  <rect x="38" y="392" width="188" height="82" rx="6" fill="#ffffff" stroke="#1a7f37" stroke-width="1.2"/>
+  <text x="132" y="411" text-anchor="middle" font-size="11" font-weight="700" fill="#1a7f37">全局二级索引 Region #88</text>
+  <text x="48" y="431" font-size="10.5" fill="#1f2328">t_i_逾期_202611_901 → id=901</text>
+  <text x="48" y="448" font-size="10.5" fill="#1f2328">t_i_逾期_202611_885 → id=885</text>
+  <text x="48" y="465" font-size="10.5" fill="#0969da">① 精准命中单个小分片拿 ID</text>
+
+  <line x1="226" y1="433" x2="262" y2="433" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#arrow-g)"/>
+  <text x="244" y="424" text-anchor="middle" font-size="10" fill="#1a7f37">回表</text>
+
+  <rect x="266" y="392" width="186" height="82" rx="6" fill="#ffffff" stroke="#1a7f37" stroke-width="1.2"/>
+  <text x="359" y="411" text-anchor="middle" font-size="11" font-weight="700" fill="#1a7f37">行数据 Regions（多节点）</text>
+  <text x="276" y="431" font-size="10.5" fill="#1f2328">Region A: t_r_885 → {整行数据}</text>
+  <text x="276" y="448" font-size="10.5" fill="#1f2328">Region B: t_r_901 → {整行数据}</text>
+  <text x="276" y="465" font-size="10.5" fill="#0969da">② 并发 Batch Get 取回整行</text>
+
+  <rect x="38" y="486" width="414" height="98" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+  <text x="52" y="507" font-size="11.5" fill="#1f2328">• 机制：行和索引拆成字典序 KV 并自动按 96MB 分裂，算子可下推并行。</text>
+  <text x="52" y="527" font-size="11.5" fill="#1a7f37">• 优势：完全不需要分表键！兼容 MySQL 协议，抗 5000 万~数亿行大表。</text>
+  <text x="52" y="547" font-size="11.5" fill="#cf222e">• 边界：跨网络+TSO+Raft 同步导致单次点查延迟略高（几毫秒），</text>
+  <text x="62" y="565" font-size="11.5" fill="#cf222e">不能用普通自增主键（需改用 AUTO_RANDOM 防写热点）。</text>
+
+  <!-- Quadrant 4: Elasticsearch -->
+  <rect x="490" y="344" width="450" height="256" rx="10" fill="#fff8f2" stroke="#f0a875" stroke-width="1.5"/>
+  <rect x="490" y="344" width="450" height="34" rx="10" fill="#ffedd5" stroke="#f0a875" stroke-width="1.5"/>
+  <text x="715" y="366" text-anchor="middle" font-size="13.5" font-weight="700" fill="#bc4c00">4. Elasticsearch（倒排 / BKD 树 + Roaring Bitmap 位图）</text>
+
+  <!-- BitSet intersection -->
+  <rect x="508" y="392" width="160" height="82" rx="6" fill="#ffffff" stroke="#bc4c00" stroke-width="1.2"/>
+  <text x="588" y="411" text-anchor="middle" font-size="11" font-weight="700" fill="#bc4c00">各条件按需生成位图</text>
+  <text x="516" y="431" font-size="10.5" fill="#1f2328">状态=逾期: 1 0 1 1 (倒排)</text>
+  <text x="516" y="448" font-size="10.5" fill="#1f2328">定价10~50: 1 1 0 1 (BKD树)</text>
+  <text x="516" y="465" font-size="10.5" fill="#0969da">余额100~8k: 1 0 0 1 (BKD树)</text>
+
+  <line x1="668" y1="433" x2="698" y2="433" stroke="#bc4c00" stroke-width="1.5" marker-end="url(#arrow-o)"/>
+  <text x="683" y="424" text-anchor="middle" font-size="10" font-weight="700" fill="#bc4c00">AND</text>
+
+  <rect x="702" y="392" width="220" height="82" rx="6" fill="#ffffff" stroke="#bc4c00" stroke-width="1.2"/>
+  <text x="812" y="411" text-anchor="middle" font-size="11" font-weight="700" fill="#bc4c00">CPU 按位与求交集 + 磁盘取详情</text>
+  <text x="712" y="431" font-size="11" font-weight="700" fill="#1a7f37">结果位图: 1 0 0 1 → 命中 ID=[1, 4]</text>
+  <text x="712" y="448" font-size="10.5" fill="#1f2328">1 条仅占 1 bit，高频位图常驻复用</text>
+  <text x="712" y="465" font-size="10.5" fill="#57606a">最后按 DocValues 排序并取 _source</text>
+
+  <rect x="508" y="486" width="414" height="98" rx="6" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+  <text x="522" y="507" font-size="11.5" fill="#1f2328">• 机制：FST 词典驻堆内存 + 倒排/BKD 走 OS 页缓存 + 原始 _source 放磁盘。</text>
+  <text x="522" y="527" font-size="11.5" fill="#1a7f37">• 优势：几十个条件任意组合、模糊文本检索、实时多维聚合、抗极高并发。</text>
+  <text x="522" y="547" font-size="11.5" fill="#cf222e">• 边界：默认硬限 10000 条内翻页（深翻页需用游标），内存成本高、写后</text>
+  <text x="532" y="565" font-size="11.5" fill="#cf222e">有 1 秒近实时延迟，且与主库间有异构同步与对账成本。</text>
+</svg>
